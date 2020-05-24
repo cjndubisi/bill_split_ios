@@ -15,7 +15,7 @@
 		4FDF3945247AA945003AEE03 /* BillSplitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF3944247AA945003AEE03 /* BillSplitTests.swift */; };
 		4FDF3953247AB7D5003AEE03 /* BalanceResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF3952247AB7D4003AEE03 /* BalanceResolver.swift */; };
 		4FDF3955247AB885003AEE03 /* Natrium.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF3954247AB885003AEE03 /* Natrium.swift */; };
-		4FDF3959247AE192003AEE03 /* BalanceResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF3958247AE192003AEE03 /* BalanceResolver.swift */; };
+		4FDF3959247AE192003AEE03 /* BalanceResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF3958247AE192003AEE03 /* BalanceResolverTests.swift */; };
 		77E84CD5D50F028D42E70CE7 /* Pods_BillSplitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3786F92783661ADD5F78B7E6 /* Pods_BillSplitTests.framework */; };
 		B5AF234885EA95715EBA714E /* Pods_BillSplit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E680DAD983128928C79641A /* Pods_BillSplit.framework */; };
 /* End PBXBuildFile section */
@@ -46,7 +46,7 @@
 		4FDF3946247AA945003AEE03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FDF3952247AB7D4003AEE03 /* BalanceResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceResolver.swift; sourceTree = "<group>"; };
 		4FDF3954247AB885003AEE03 /* Natrium.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Natrium.swift; path = Pods/Natrium/bin/Natrium.swift; sourceTree = SOURCE_ROOT; };
-		4FDF3958247AE192003AEE03 /* BalanceResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceResolver.swift; sourceTree = "<group>"; };
+		4FDF3958247AE192003AEE03 /* BalanceResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceResolverTests.swift; sourceTree = "<group>"; };
 		53446205D4D4D5E4F82D848B /* Pods-BillSplit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BillSplit.release.xcconfig"; path = "Target Support Files/Pods-BillSplit/Pods-BillSplit.release.xcconfig"; sourceTree = "<group>"; };
 		82FCFF8898AF4DD176A2041A /* Pods-BillSplit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BillSplit.debug.xcconfig"; path = "Target Support Files/Pods-BillSplit/Pods-BillSplit.debug.xcconfig"; sourceTree = "<group>"; };
 		8F751362FC61D74CA8054BE4 /* Pods-BillSplitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BillSplitTests.debug.xcconfig"; path = "Target Support Files/Pods-BillSplitTests/Pods-BillSplitTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -109,7 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				4FDF3944247AA945003AEE03 /* BillSplitTests.swift */,
-				4FDF3958247AE192003AEE03 /* BalanceResolver.swift */,
+				4FDF3958247AE192003AEE03 /* BalanceResolverTests.swift */,
 				4FDF3946247AA945003AEE03 /* Info.plist */,
 			);
 			path = BillSplitTests;
@@ -361,7 +361,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FDF3959247AE192003AEE03 /* BalanceResolver.swift in Sources */,
+				4FDF3959247AE192003AEE03 /* BalanceResolverTests.swift in Sources */,
 				4FDF3945247AA945003AEE03 /* BillSplitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
