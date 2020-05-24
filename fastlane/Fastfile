@@ -1,0 +1,122 @@
+fastlane_version '2.141.0'
+
+before_all do |lane, options|
+  ensure_git_status_clean(show_uncommitted_changes: true) if is_ci?
+  if is_ci? && ENV["FASTLANE_PLATFORM_NAME"] == 'ios'
+    create_ci_keychain
+  end
+end
+
+after_all do |lane, options|
+  if is_ci? && ENV["FASTLANE_PLATFORM_NAME"] == 'ios'
+    delete_ci_keychain
+  end
+end
+
+error do |lane, exception|
+  if is_ci? && ENV["FASTLANE_PLATFORM_NAME"] == 'ios'
+    delete_ci_keychain
+  end
+end
+
+private_lane :options_for_branch do | options |
+  {
+    app_identifier: 'cjndubisi.challenge.BillSplit',
+    export_type: git_branch == 'master' ? 'app-store' : 'ad-hoc',
+    match_type: git_branch == 'master' ? 'appstore' : 'adhoc',
+    match_profile_name: git_branch == 'master' ? 'match AppStore cjndubisi.challenge.BillSplit' : 'match AdHoc cjndubisi.challenge.BillSplit'
+  }
+end
+
+platform :ios do
+  # iOS Lanes
+
+  desc 'Fetch certificates and provisioning profiles'
+  lane :certificates do
+    match(app_identifier: 'cjndubisi.challenge.BillSplit',
+      verbose: is_ci?, 
+      type: 'development',
+      readonly: false) unless is_ci?
+    match(app_identifier: 'cjndubisi.challenge.BillSplit',
+      verbose: is_ci?, 
+      type: 'adhoc',
+      readonly: is_ci?,
+      clone_branch_directly: true)
+    match(app_identifier: 'cjndubisi.challenge.BillSplit',
+      verbose: is_ci?, 
+      type: 'appstore',
+      readonly: is_ci?,
+      clone_branch_directly: true)
+  end
+
+  desc 'Build the iOS application.'
+  private_lane :build do
+    options = options_for_branch
+
+    clear_derived_data
+    cocoapods(
+      repo_update: true,
+      use_bundle_exec: true,
+    )
+
+    certificates
+    increment_build_number
+
+    gym(
+      scheme: 'BillSplit',
+      workspace: './BillSplit.xcworkspace',
+      configuration: 'Release',
+      clean: true,
+      export_method: options[:export_type],
+      export_options: {
+        method: options[:export_type],
+        provisioningProfiles: { 
+          'challenge.BillSplit' => options[:match_profile_name]
+        }
+      }
+    )
+  end
+
+  desc 'Ship to AppCenter'
+  lane :alpha do
+    build
+    appcenter_upload(
+      api_token: ENV['APPCENTER_API_TOKEN'],
+      owner_name: 'cjndubisi',
+      app_name: 'BillSplit-iOS',
+      notify_testers: true,
+      app_os: 'iOS',
+      dsym: ENV['FASTLANE_OUTPUT_DIRECTORY'],
+      ipa: ENV['FASTLANE_OUTPUT_DIRECTORY']
+    )
+
+    commit_version_bump(message: '[skip ci] Bump build', xcodeproj: './BillSplit.xcodeproj')
+    push_to_git_remote(
+      remote_branch: git_branch,
+      tags: false
+    )
+  end
+
+  private_lane :create_ci_keychain do
+    keychain_name = 'ci_keychain'
+    ENV['KEYCHAIN_NAME'] = keychain_name
+    ENV['KEYCHAIN_PASSWORD'] = keychain_name
+    ENV['MATCH_KEYCHAIN_NAME'] = keychain_name
+    ENV['MATCH_KEYCHAIN_PASSWORD'] = keychain_name
+
+    create_keychain(
+      name: keychain_name,
+      password: keychain_name,
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      add_to_search_list: true
+    )
+  end
+
+  private_lane :delete_ci_keychain do
+    delete_keychain(name: 'ci_keychain')
+  end
+end
+
+

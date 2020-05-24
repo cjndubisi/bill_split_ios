@@ -1,0 +1,8 @@
+environments:
+  - Staging
+  - Production
+
+variables:
+  apiEndpoint:
+    Staging: '#env(API_URL)'
+    Production: '#env(API_URL)'
