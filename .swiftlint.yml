@@ -1,0 +1,19 @@
+disabled_rules: # rule identifiers to exclude from running
+  - identifier_name
+  - colon
+
+opt_in_rules:
+  - closure_spacing
+  - contains_over_first_not_nil
+  - empty_count
+
+trailing_comma:
+  mandatory_comma: true
+
+included:
+  - ./BillSplit
+
+identifier_name:
+  excluded:
+    - id
+    - URL

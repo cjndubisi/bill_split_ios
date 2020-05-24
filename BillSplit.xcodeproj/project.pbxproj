@@ -140,6 +140,7 @@
 				4FDF3927247AA943003AEE03 /* Frameworks */,
 				4FDF3928247AA943003AEE03 /* Resources */,
 				35936913C4E0F31B05342462 /* [CP] Embed Pods Frameworks */,
+				4FDF3951247AB05F003AEE03 /* Lint */,
 			);
 			buildRules = (
 			);
@@ -262,6 +263,24 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BillSplit/Pods-BillSplit-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		4FDF3951247AB05F003AEE03 /* Lint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Lint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
 		};
 		8C4FD596AE36E8E4047A3E7A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -515,7 +534,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8F751362FC61D74CA8054BE4 /* Pods-BillSplitTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M9399PEWF4;
@@ -538,7 +556,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 419377B200CABDE6EBB40B1D /* Pods-BillSplitTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M9399PEWF4;

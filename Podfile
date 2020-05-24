@@ -5,13 +5,24 @@ target 'BillSplit' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
+  # Rx
   pod 'RxSwift'
-  pod 'RxCocoa'
-  pod 'SteviaLayout'
   pod 'RxDataSources', '~> 4.0'
+  pod 'RxCocoa'
+
+  # UI
+  pod 'SteviaLayout'
+  pod 'NVActivityIndicatorView'
+
+  # Networking
   pod 'Moya'
+
+  # Build Tools
   pod 'Natrium'
-  
+  pod 'SwiftLint'
+
+  # Parser
+  pod 'SwiftyJSON'
   # Pods for BillSplit
 
   target 'BillSplitTests' do
