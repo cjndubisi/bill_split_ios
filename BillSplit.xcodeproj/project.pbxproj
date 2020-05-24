@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4FDF392E247AA943003AEE03 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF392D247AA943003AEE03 /* AppDelegate.swift */; };
-		4FDF3932247AA943003AEE03 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF3931247AA943003AEE03 /* ViewController.swift */; };
 		4FDF3935247AA943003AEE03 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF3933247AA943003AEE03 /* Main.storyboard */; };
 		4FDF3937247AA945003AEE03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF3936247AA945003AEE03 /* Assets.xcassets */; };
 		4FDF393A247AA945003AEE03 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF3938247AA945003AEE03 /* LaunchScreen.storyboard */; };
@@ -16,6 +15,12 @@
 		4FDF3953247AB7D5003AEE03 /* BalanceResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF3952247AB7D4003AEE03 /* BalanceResolver.swift */; };
 		4FDF3955247AB885003AEE03 /* Natrium.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF3954247AB885003AEE03 /* Natrium.swift */; };
 		4FDF3959247AE192003AEE03 /* BalanceResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF3958247AE192003AEE03 /* BalanceResolverTests.swift */; };
+		4FDF395B247AE6D7003AEE03 /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF395A247AE6D7003AEE03 /* AuthenticationCoordinator.swift */; };
+		4FDF395D247AE6E2003AEE03 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF395C247AE6E2003AEE03 /* Coordinator.swift */; };
+		4FDF395F247AEBD6003AEE03 /* AuthenticationController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF395E247AEBD6003AEE03 /* AuthenticationController.xib */; };
+		4FDF3964247AFD34003AEE03 /* AuthenticationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF3963247AFD34003AEE03 /* AuthenticationController.swift */; };
+		4FDF3967247AFD8C003AEE03 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF3965247AFD8C003AEE03 /* LoginController.swift */; };
+		4FDF396B247AFDA8003AEE03 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF3969247AFDA8003AEE03 /* SignUpController.swift */; };
 		77E84CD5D50F028D42E70CE7 /* Pods_BillSplitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3786F92783661ADD5F78B7E6 /* Pods_BillSplitTests.framework */; };
 		B5AF234885EA95715EBA714E /* Pods_BillSplit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E680DAD983128928C79641A /* Pods_BillSplit.framework */; };
 /* End PBXBuildFile section */
@@ -36,7 +41,6 @@
 		419377B200CABDE6EBB40B1D /* Pods-BillSplitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BillSplitTests.release.xcconfig"; path = "Target Support Files/Pods-BillSplitTests/Pods-BillSplitTests.release.xcconfig"; sourceTree = "<group>"; };
 		4FDF392A247AA943003AEE03 /* BillSplit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BillSplit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FDF392D247AA943003AEE03 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4FDF3931247AA943003AEE03 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		4FDF3934247AA943003AEE03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4FDF3936247AA945003AEE03 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4FDF3939247AA945003AEE03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,6 +51,12 @@
 		4FDF3952247AB7D4003AEE03 /* BalanceResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceResolver.swift; sourceTree = "<group>"; };
 		4FDF3954247AB885003AEE03 /* Natrium.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Natrium.swift; path = Pods/Natrium/bin/Natrium.swift; sourceTree = SOURCE_ROOT; };
 		4FDF3958247AE192003AEE03 /* BalanceResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceResolverTests.swift; sourceTree = "<group>"; };
+		4FDF395A247AE6D7003AEE03 /* AuthenticationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator.swift; sourceTree = "<group>"; };
+		4FDF395C247AE6E2003AEE03 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		4FDF395E247AEBD6003AEE03 /* AuthenticationController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AuthenticationController.xib; sourceTree = "<group>"; };
+		4FDF3963247AFD34003AEE03 /* AuthenticationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationController.swift; sourceTree = "<group>"; };
+		4FDF3965247AFD8C003AEE03 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		4FDF3969247AFDA8003AEE03 /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		53446205D4D4D5E4F82D848B /* Pods-BillSplit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BillSplit.release.xcconfig"; path = "Target Support Files/Pods-BillSplit/Pods-BillSplit.release.xcconfig"; sourceTree = "<group>"; };
 		82FCFF8898AF4DD176A2041A /* Pods-BillSplit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BillSplit.debug.xcconfig"; path = "Target Support Files/Pods-BillSplit/Pods-BillSplit.debug.xcconfig"; sourceTree = "<group>"; };
 		8F751362FC61D74CA8054BE4 /* Pods-BillSplitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BillSplitTests.debug.xcconfig"; path = "Target Support Files/Pods-BillSplitTests/Pods-BillSplitTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -96,7 +106,8 @@
 			isa = PBXGroup;
 			children = (
 				4FDF392D247AA943003AEE03 /* AppDelegate.swift */,
-				4FDF3931247AA943003AEE03 /* ViewController.swift */,
+				4FDF3962247AFD06003AEE03 /* Authentication */,
+				4FDF3961247AFCE7003AEE03 /* Coordinator */,
 				4FDF3933247AA943003AEE03 /* Main.storyboard */,
 				4FDF3938247AA945003AEE03 /* LaunchScreen.storyboard */,
 				4FDF3952247AB7D4003AEE03 /* BalanceResolver.swift */,
@@ -123,6 +134,26 @@
 				4FDF3954247AB885003AEE03 /* Natrium.swift */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4FDF3961247AFCE7003AEE03 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				4FDF395C247AE6E2003AEE03 /* Coordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		4FDF3962247AFD06003AEE03 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				4FDF395E247AEBD6003AEE03 /* AuthenticationController.xib */,
+				4FDF395A247AE6D7003AEE03 /* AuthenticationCoordinator.swift */,
+				4FDF3963247AFD34003AEE03 /* AuthenticationController.swift */,
+				4FDF3965247AFD8C003AEE03 /* LoginController.swift */,
+				4FDF3969247AFDA8003AEE03 /* SignUpController.swift */,
+			);
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 		8F220275E757658B2CC9B3D3 /* Pods */ = {
@@ -157,6 +188,7 @@
 				4FDF3927247AA943003AEE03 /* Frameworks */,
 				4FDF3928247AA943003AEE03 /* Resources */,
 				35936913C4E0F31B05342462 /* [CP] Embed Pods Frameworks */,
+				4FDF3960247AF852003AEE03 /* Format */,
 				4FDF3951247AB05F003AEE03 /* Lint */,
 			);
 			buildRules = (
@@ -231,6 +263,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FDF395F247AEBD6003AEE03 /* AuthenticationController.xib in Resources */,
 				4FDF393A247AA945003AEE03 /* LaunchScreen.storyboard in Resources */,
 				4FDF3937247AA945003AEE03 /* Assets.xcassets in Resources */,
 				4FDF3935247AA943003AEE03 /* Main.storyboard in Resources */,
@@ -299,6 +332,24 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
 		};
+		4FDF3960247AF852003AEE03 /* Format */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Format;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" \"$SRCROOT\"\n";
+		};
 		8C4FD596AE36E8E4047A3E7A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -351,9 +402,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FDF3955247AB885003AEE03 /* Natrium.swift in Sources */,
-				4FDF3932247AA943003AEE03 /* ViewController.swift in Sources */,
+				4FDF395B247AE6D7003AEE03 /* AuthenticationCoordinator.swift in Sources */,
+				4FDF395D247AE6E2003AEE03 /* Coordinator.swift in Sources */,
+				4FDF396B247AFDA8003AEE03 /* SignUpController.swift in Sources */,
+				4FDF3964247AFD34003AEE03 /* AuthenticationController.swift in Sources */,
 				4FDF3953247AB7D5003AEE03 /* BalanceResolver.swift in Sources */,
 				4FDF392E247AA943003AEE03 /* AppDelegate.swift in Sources */,
+				4FDF3967247AFD8C003AEE03 /* LoginController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

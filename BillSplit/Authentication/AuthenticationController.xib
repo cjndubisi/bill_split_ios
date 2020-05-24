@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AuthenticaitonController" customModule="BillSplit" customModuleProvider="target">
+            <connections>
+                <outlet property="loginBtn" destination="YYX-ke-4ek" id="5jK-Lt-Rjh"/>
+                <outlet property="signupBtn" destination="IZc-6A-hUn" id="8n8-Jh-YN0"/>
+                <outlet property="view" destination="iN0-l3-epB" id="Kcm-Yv-3NH"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bill Split" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gxr-WY-XgQ">
+                    <rect key="frame" x="124" y="200" width="127.5" height="41"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="uKL-Qj-1hJ">
+                    <rect key="frame" x="112.5" y="301.5" width="150" height="104"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IZc-6A-hUn">
+                            <rect key="frame" x="0.0" y="0.0" width="150" height="40"/>
+                            <color key="backgroundColor" red="0.1430601776" green="0.3423296213" blue="0.60787129399999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="5AJ-x6-uS4"/>
+                            </constraints>
+                            <state key="normal" title="Sign Up">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YYX-ke-4ek">
+                            <rect key="frame" x="0.0" y="64" width="150" height="40"/>
+                            <color key="backgroundColor" red="0.1430601776" green="0.3423296213" blue="0.60787129399999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <state key="normal" title="Log In">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="YYX-ke-4ek" firstAttribute="height" secondItem="IZc-6A-hUn" secondAttribute="height" id="lrt-Y1-yeH"/>
+                        <constraint firstAttribute="width" constant="150" id="xR4-Vt-DuZ"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="uKL-Qj-1hJ" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="CA2-or-HqN"/>
+                <constraint firstItem="uKL-Qj-1hJ" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" constant="20" id="SQG-rt-QUI"/>
+                <constraint firstItem="Gxr-WY-XgQ" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="lKH-wb-Z6G"/>
+                <constraint firstItem="IZc-6A-hUn" firstAttribute="top" secondItem="Gxr-WY-XgQ" secondAttribute="bottom" constant="60.5" id="ngU-Pr-tDM"/>
+                <constraint firstItem="Gxr-WY-XgQ" firstAttribute="centerX" secondItem="uKL-Qj-1hJ" secondAttribute="centerX" id="p5T-0D-R5w"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="139" y="138"/>
+        </view>
+    </objects>
+</document>
