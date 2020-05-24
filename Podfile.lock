@@ -1,6 +1,7 @@
 PODS:
   - Alamofire (5.1.0)
   - Differentiator (4.0.1)
+  - Eureka (5.2.1)
   - Moya (14.0.0):
     - Moya/Core (= 14.0.0)
   - Moya/Core (14.0.0):
@@ -27,6 +28,7 @@ PODS:
   - SwiftyJSON (5.0.0)
 
 DEPENDENCIES:
+  - Eureka
   - Moya
   - Natrium
   - NVActivityIndicatorView
@@ -43,6 +45,7 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - Differentiator
+    - Eureka
     - Moya
     - Natrium
     - NVActivityIndicatorView
@@ -59,6 +62,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: 9d5c5f602928e512395b30950c5984eca840093c
   Differentiator: 886080237d9f87f322641dedbc5be257061b0602
+  Eureka: c883105488e05bc65539f583246ecf9657cabbfe
   Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   Natrium: 3ba63e4cc7f7f2ac0bd4c8a91b834422fa0d2b91
   NVActivityIndicatorView: d24b7ebcf80af5dcd994adb650e2b6c93379270f
@@ -72,6 +76,6 @@ SPEC CHECKSUMS:
   SwiftLint: 22ccbbe3b8008684be5955693bab135e0ed6a447
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: 347faf69bf0fcd8a5bcc31c203455a8a7477206a
+PODFILE CHECKSUM: 29a31d3af42278f62454a78ac520fadaceb54646
 
 COCOAPODS: 1.9.2

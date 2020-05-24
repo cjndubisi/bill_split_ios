@@ -26,7 +26,7 @@ class AuthViewModel: ViewModel {
   }
 }
 
-class AuthenticaitonController: UIViewController {
+class AuthenticationController: UIViewController {
   var viewModel: AuthViewModel!
   let disposeBag = DisposeBag()
 
@@ -34,10 +34,14 @@ class AuthenticaitonController: UIViewController {
   @IBOutlet var loginBtn: UIButton!
 
   init(viewModel: AuthViewModel) {
-    super.init(nibName: nil, bundle: nil)
+    super.init(nibName: "AuthenticationController", bundle: .main)
     self.viewModel = viewModel
   }
 
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    navigationController?.isNavigationBarHidden = true
+  }
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }

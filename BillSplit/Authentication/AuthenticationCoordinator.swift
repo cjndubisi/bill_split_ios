@@ -6,26 +6,29 @@
 //  Copyright © 2020 Chijioke. All rights reserved.
 //
 
+import RxSwift
 import UIKit
 
 class AuthenticationCoordinator: BaseCoordinator {
-  private var controller: AuthenticaitonController!
+  private var controller: AuthenticationController!
   private var loginController: UIViewController = UIViewController(nibName: nil, bundle: nil)
-  private var signUpController: UIViewController = UIViewController(nibName: nil, bundle: nil)
+  private var signUpController: UIViewController = SignUpController(viewModel: .init())
 
   override func start() {
     let viewModel = AuthViewModel()
-    let controller = AuthenticaitonController(viewModel: viewModel)
+    let controller = AuthenticationController(viewModel: viewModel)
 
-    viewModel.actionObservable.subscribe(onNext: { [weak self] in
-      switch $0 {
-      case .login: self?.loginFlow()
-      case .signup: self?.signupFlow()
-      }
-        }).disposed(by: controller.disposeBag)
+    viewModel.actionObservable
+      .observeOn(MainScheduler.instance)
+      .subscribe(onNext: {
+        switch $0 {
+        case .login: self.loginFlow()
+        case .signup: self.signupFlow()
+        }
+    }).disposed(by: controller.disposeBag)
 
     self.controller = controller
-
+    navigationController.isNavigationBarHidden = true
     navigationController.setViewControllers([controller], animated: false)
   }
 

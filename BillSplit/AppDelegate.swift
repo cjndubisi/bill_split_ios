@@ -6,7 +6,7 @@
 //  Copyright © 2020 Chijioke. All rights reserved.
 //
 
-import UIKit
+import NVActivityIndicatorView
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +17,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     // Override point for customization after application launch.
+    let navigationController = UINavigationController()
+    let authCoordinator = AuthenticationCoordinator(navigationController: navigationController)
+
+    NVActivityIndicatorView.DEFAULT_TYPE = .circleStrokeSpin
+    NVActivityIndicatorView.DEFAULT_COLOR = .blue
+    NVActivityIndicatorView.DEFAULT_TEXT_COLOR = .white
+
+    window?.rootViewController = navigationController
+    window?.makeKeyAndVisible()
+    authCoordinator.start()
+
     return true
   }
 }

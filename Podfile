@@ -21,6 +21,7 @@ target 'BillSplit' do
   pod 'Natrium'
   pod 'SwiftLint'
   pod 'SwiftFormat/CLI'
+  pod 'Eureka'
 
   # Parser
   pod 'SwiftyJSON'
