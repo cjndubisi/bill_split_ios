@@ -20,6 +20,7 @@ target 'BillSplit' do
   # Build Tools
   pod 'Natrium'
   pod 'SwiftLint'
+  pod 'SwiftFormat/CLI'
 
   # Parser
   pod 'SwiftyJSON'

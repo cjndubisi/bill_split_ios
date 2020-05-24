@@ -22,6 +22,7 @@ PODS:
   - RxTest (5.1.1):
     - RxSwift (~> 5)
   - SteviaLayout (4.7.3)
+  - SwiftFormat/CLI (0.44.11)
   - SwiftLint (0.39.2)
   - SwiftyJSON (5.0.0)
 
@@ -34,6 +35,7 @@ DEPENDENCIES:
   - RxSwift
   - RxTest
   - SteviaLayout
+  - SwiftFormat/CLI
   - SwiftLint
   - SwiftyJSON
 
@@ -50,6 +52,7 @@ SPEC REPOS:
     - RxSwift
     - RxTest
     - SteviaLayout
+    - SwiftFormat
     - SwiftLint
     - SwiftyJSON
 
@@ -65,9 +68,10 @@ SPEC CHECKSUMS:
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
   RxTest: 711632d5644dffbeb62c936a521b5b008a1e1faa
   SteviaLayout: c2ecdcff57d44e38fd2f65e54ad52aeae28ca0c4
+  SwiftFormat: bb8ccdfcc6d0eb1f061e32d246d3cff12a9b888c
   SwiftLint: 22ccbbe3b8008684be5955693bab135e0ed6a447
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: e67e0c73f91481e69eb9a1c3d141b94207e4deba
+PODFILE CHECKSUM: 347faf69bf0fcd8a5bcc31c203455a8a7477206a
 
 COCOAPODS: 1.9.2

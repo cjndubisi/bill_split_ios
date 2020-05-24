@@ -9,28 +9,27 @@
 import Foundation
 
 struct Bill {
-    let amount: Double
-    let payer: String
-    let participants: [String]
+  let amount: Double
+  let payer: String
+  let participants: [String]
 }
 
 struct Group {
-    let users: [String]
-    let history: [Bill]
+  let users: [String]
+  let history: [Bill]
 }
 
 struct Payment {
-    var gets: [String: Double] = [:]
-    var debts: [String: Double] = [:]
+  var gets: [String: Double] = [:]
+  var debts: [String: Double] = [:]
 }
 
 extension Group {
+  func balances() -> [String: Payment] {
+    let resolver = BalanceResolver()
 
-    func balances() -> [String: Payment] {
-        let resolver = BalanceResolver()
-
-        return resolver.resolve(from: self)
-    }
+    return resolver.resolve(from: self)
+  }
 }
 
 // let groupA = Group(users: ["a", "b", "c"], history: [
@@ -59,52 +58,49 @@ extension Group {
 
 typealias Result = [String: Payment]
 struct BalanceResolver {
+  public func resolve(from group: Group) -> [String: Payment] {
+    let history = group.history
+    let users = group.users
+    let itemStatement = history.map { (item) -> Result in
+      let result: Result = [:]
+      let split = item.amount / Double(item.participants.count)
 
-    public func resolve(from group: Group) -> [String : Payment] {
+      return item.participants.reduce(result) { (prev, next) -> [String: Payment] in
+        var acc = prev
+        guard next != item.payer else { return acc }
 
-        let history = group.history
-        let users = group.users
-        let itemStatement = history.map { (item) -> Result in
-            let result: Result = [:]
-            let split = item.amount / Double(item.participants.count)
+        acc[item.payer] = acc[item.payer] ?? Payment()
+        acc[next] = acc[next] ?? Payment()
 
-            return item.participants.reduce(result) { (prev, next) -> [String: Payment] in
-                var acc = prev
-                guard next != item.payer else { return acc }
+        let payersGet = (acc[item.payer]?.gets ?? [String: Double]()).merging([next: split]) { _, new in new }
+        let payersDebts = acc[item.payer]?.debts ?? [String: Double]()
+        acc[item.payer] = Payment(gets: payersGet, debts: payersDebts)
 
-                acc[item.payer] = acc[item.payer] ?? Payment()
-                acc[next] = acc[next] ?? Payment()
+        let debtorsGet = acc[next]?.gets ?? [String: Double]()
+        let debtorsDebts = (acc[next]?.debts ?? [String: Double]()).merging([item.payer: split * -1]) { _, new in new }
+        acc[next] = Payment(gets: debtorsGet,
+                            debts: debtorsDebts)
 
-                let payersGet = (acc[item.payer]?.gets ?? [String: Double]()).merging([next: split]) { _, new in new }
-                let payersDebts = acc[item.payer]?.debts ?? [String: Double]()
-                acc[item.payer] = Payment(gets: payersGet, debts: payersDebts)
-
-                let debtorsGet = acc[next]?.gets ?? [String: Double]()
-                let debtorsDebts = (acc[next]?.debts ?? [String: Double]()).merging([item.payer: split * -1]) { _, new in new }
-                acc[next] = Payment(gets: debtorsGet,
-                                    debts: debtorsDebts)
-
-                return acc
-            }
-        }
-
-        let details: Result = itemStatement.reduce(Result()) { (prev, next) -> Result in
-            var acc = prev
-            // combine each users gets and debts
-            users.forEach { (user) in
-                let accGets: [String: Double] = acc[user]?.gets ?? [:]
-                let accDebts: [String: Double]  = acc[user]?.debts ?? [:]
-                let nextGets: [String: Double] = next[user]?.gets ?? [:]
-                let nextDebts: [String: Double]  = next[user]?.debts ?? [:]
-
-                acc[user] = Payment(gets: accGets.merging(nextGets, uniquingKeysWith: +),
-                                    debts: accDebts.merging(nextDebts, uniquingKeysWith: +))
-            }
-
-            return acc
-        }
-
-        return details
+        return acc
+      }
     }
 
+    let details: Result = itemStatement.reduce(Result()) { (prev, next) -> Result in
+      var acc = prev
+      // combine each users gets and debts
+      users.forEach { user in
+        let accGets: [String: Double] = acc[user]?.gets ?? [:]
+        let accDebts: [String: Double] = acc[user]?.debts ?? [:]
+        let nextGets: [String: Double] = next[user]?.gets ?? [:]
+        let nextDebts: [String: Double] = next[user]?.debts ?? [:]
+
+        acc[user] = Payment(gets: accGets.merging(nextGets, uniquingKeysWith: +),
+                            debts: accDebts.merging(nextDebts, uniquingKeysWith: +))
+      }
+
+      return acc
+    }
+
+    return details
+  }
 }

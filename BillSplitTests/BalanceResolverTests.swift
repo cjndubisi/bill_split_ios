@@ -6,27 +6,26 @@
 //  Copyright © 2020 Chijioke. All rights reserved.
 //
 
-import XCTest
 @testable import BillSplit
+import XCTest
 
 class BalanceResolverTests: XCTestCase {
+  func testResolver() {
+    let groupA = Group(users: ["a", "b", "c"], history: [
+      Bill(amount: 90, payer: "a", participants: ["a", "b", "c"]),
+      Bill(amount: 12, payer: "b", participants: ["a", "b", "c"]),
+    ])
 
-    func testResolver() {
-        let groupA = Group(users: ["a", "b", "c"], history: [
-            Bill(amount: 90,payer: "a", participants: ["a", "b", "c"]),
-            Bill(amount: 12,payer: "b", participants: ["a", "b", "c"]),
-        ])
+    let resolver = BalanceResolver()
+    let result = resolver.resolve(from: groupA)
 
-        let resolver = BalanceResolver()
-        let result = resolver.resolve(from: groupA)
+    XCTAssertEqual(result["a"]?.gets, ["b": 30, "c": 30])
+    XCTAssertEqual(result["a"]?.debts, ["b": -4])
 
-        XCTAssertEqual(result["a"]?.gets, ["b": 30, "c": 30])
-        XCTAssertEqual(result["a"]?.debts, ["b": -4])
+    XCTAssertEqual(result["b"]?.gets, ["a": 4, "c": 4])
+    XCTAssertEqual(result["b"]?.debts, ["a": -30])
 
-        XCTAssertEqual(result["b"]?.gets, ["a": 4, "c": 4])
-        XCTAssertEqual(result["b"]?.debts, ["a": -30])
-
-        XCTAssertEqual(result["c"]?.gets, [:])
-        XCTAssertEqual(result["c"]?.debts, ["a": -30, "b": -4])
-    }
+    XCTAssertEqual(result["c"]?.gets, [:])
+    XCTAssertEqual(result["c"]?.debts, ["a": -30, "b": -4])
+  }
 }
