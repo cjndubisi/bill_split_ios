@@ -11,6 +11,7 @@ import RxSwift
 import Stevia
 class AuthViewModel: ViewModel {
   let actionObserver: AnyObserver<Action>
+  // swiftlint:disable:next weak_delegate
   let coordinatorDelegate: Observable<CoordinatorDelegate>
 
   enum Action {

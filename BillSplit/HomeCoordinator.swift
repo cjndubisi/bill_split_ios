@@ -6,9 +6,12 @@
 //  Copyright © 2020 Chijioke. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class HomeCoordinator: BaseCoordinator {
+  // swiftlint:disable:next weak_delegate
+  var parentDelegate: ((ApplicationCoordinatorDelegate) -> Void)!
+
   override func start() {
     let controller = UITableViewController(style: .plain)
     navigationController.setViewControllers([controller], animated: true)

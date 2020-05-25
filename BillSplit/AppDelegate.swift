@@ -15,8 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     _: UIApplication,
     didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-
-
     NVActivityIndicatorView.DEFAULT_TYPE = .circleStrokeSpin
     NVActivityIndicatorView.DEFAULT_COLOR = .blue
     NVActivityIndicatorView.DEFAULT_TEXT_COLOR = .white
@@ -48,23 +46,51 @@ class ApplicationCoordinator: Coordinator {
     defer {
       window.rootViewController = rootController
       window.makeKeyAndVisible()
-      print(children)
     }
 
-    guard isLoggedIn else {
-      let authCoordinator = AuthenticationCoordinator(navigationController: rootController)
-      authCoordinator.start()
+    guard isLoggedIn else { return authFlow(navigation: rootController) }
 
-      children[String(describing: authCoordinator)] = authCoordinator
-      authCoordinator.finish = { [weak self, unowned authCoordinator] in
-        self?.children.removeValue(forKey: String(describing: authCoordinator))
-      }
-      return
+    homeFlow(navigation: rootController)
+  }
+
+  func authFlow(navigation: UINavigationController) {
+    let authCoordinator = AuthenticationCoordinator(navigationController: navigation)
+
+    children[String(describing: authCoordinator)] = authCoordinator
+    // authenticated.
+    authCoordinator.parentDelegate = { [weak self, unowned authCoordinator] in
+      guard case .homeFlow = $0 else { return }
+      self?.homeFlow(navigation: navigation)
+      authCoordinator.finish?()
     }
-    let homeCoordinator = HomeCoordinator(navigationController: rootController)
+    authCoordinator.finish = { [weak self, unowned authCoordinator] in
+      self?.children[String(describing: authCoordinator)] = nil
+    }
+
+    authCoordinator.start()
+  }
+
+  func homeFlow(navigation: UINavigationController) {
+    let homeCoordinator = HomeCoordinator(navigationController: navigation)
+
     children[String(describing: homeCoordinator)] = homeCoordinator
+
+    // logout.
+    homeCoordinator.parentDelegate = { [weak self, unowned homeCoordinator] in
+      guard case .authFlow = $0 else { return }
+      self?.authFlow(navigation: navigation)
+      homeCoordinator.finish?()
+    }
     homeCoordinator.finish = { [weak self, unowned homeCoordinator] in
       self?.children.removeValue(forKey: String(describing: homeCoordinator))
     }
+
+    homeCoordinator.start()
   }
+}
+
+enum ApplicationCoordinatorDelegate {
+  case authFlow
+  case homeFlow
+  case start(Scene) // Deep Link
 }

@@ -15,15 +15,18 @@ class AuthenticationCoordinator: BaseCoordinator {
   private lazy var loginController: UIViewController = UIViewController(nibName: nil, bundle: nil)
   private weak var signUpController: SignUpController!
 
+  // swiftlint:disable:next weak_delegate
+  var parentDelegate: ((ApplicationCoordinatorDelegate) -> Void)!
+
   override func start() {
     let viewModel = AuthViewModel()
     let controller = AuthenticationController(viewModel: viewModel)
 
     viewModel.coordinatorDelegate
       .observeOn(MainScheduler.instance)
-      .subscribe(onNext: {
+      .subscribe(onNext: { [weak self] in
         guard case let .navigate(scene) = $0 else { return }
-        self.route(to: scene)
+        self?.route(to: scene)
     }).disposed(by: controller.disposeBag)
 
     self.controller = controller
@@ -35,11 +38,6 @@ class AuthenticationCoordinator: BaseCoordinator {
 
   private func loginScene() {
     navigationController.pushViewController(loginController, animated: true)
-  }
-
-  private func homeFlow() {
-    // finish this coordintator
-    // start home coordinator with nav.setViewController
   }
 
   func signupScene() {
@@ -71,7 +69,8 @@ class AuthenticationCoordinator: BaseCoordinator {
     switch scene {
     case .login: loginScene()
     case .signup: signupScene()
-    case .home: homeFlow()
+    case .home:
+      parentDelegate?(.homeFlow)
     default:
       break
     }

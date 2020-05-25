@@ -136,9 +136,8 @@ class SignUpViewModel: ViewModel {
       +++ Section()
       <<< ButtonRow("signup", { row in
         row.title = "Sign Up"
-      }).onCellSelection({ [weak self] _, _ in
+      }).onCellSelection({ [weak self, unowned form] _, _ in
         let errors = form.validate()
-        print(errors)
         guard errors.isEmpty else { return }
         self?.signupAction.onNext(())
       })
