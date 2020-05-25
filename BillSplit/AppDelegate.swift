@@ -29,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 class ApplicationCoordinator: Coordinator {
   var finish: (() -> Void)!
   let window: UIWindow
+  private var service = BillAPIService()
 
   private(set) var children: [String: Coordinator] = [:]
 
@@ -71,7 +72,7 @@ class ApplicationCoordinator: Coordinator {
   }
 
   func homeFlow(navigation: UINavigationController) {
-    let homeCoordinator = HomeCoordinator(navigationController: navigation)
+    let homeCoordinator = HomeCoordinator(service: service, navigationController: navigation)
 
     children[String(describing: homeCoordinator)] = homeCoordinator
 

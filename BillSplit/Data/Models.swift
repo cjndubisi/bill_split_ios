@@ -16,13 +16,13 @@ struct User: Codable {
 
 extension User: Hashable {}
 
-struct Bill {
+struct Bill: Codable {
   let amount: Double
   let payerId: Int
   let participants: [User]
 }
 
-struct Group {
+struct Group: Codable {
   let users: [User]
   let history: [Bill]
 }

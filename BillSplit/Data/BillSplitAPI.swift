@@ -19,7 +19,7 @@ struct AuthParameter: RequestParam {
   let password: String
 }
 
-struct GroupRequest: RequestParam {
+struct GroupRequestParam: RequestParam {
   let name: String
 }
 
@@ -55,7 +55,7 @@ enum BillSplitAPI {
   // Groups
   case getGroup(Int)
   case allGroups
-  case createGroup(GroupRequest)
+  case createGroup(GroupRequestParam)
   case addFriendToGroup(FriendRequest)
 
   // Expense
