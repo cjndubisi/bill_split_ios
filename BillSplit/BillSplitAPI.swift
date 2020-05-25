@@ -30,9 +30,7 @@ struct ExpenseRequest: RequestParam {
   let participants: [Int]
 }
 
-protocol RequestParam: Codable {
-
-}
+protocol RequestParam: Codable {}
 
 extension RequestParam {
   var JSON: [String: Any] {
@@ -59,7 +57,6 @@ enum BillSplitAPI {
   case addExpense(ExpenseRequest)
 }
 
-
 extension BillSplitAPI: TargetType {
   var path: String {
     switch self {
@@ -71,11 +68,11 @@ extension BillSplitAPI: TargetType {
       return "/users/signout"
 
     // Groups
-    case .getGroup(let id):
+    case let .getGroup(id):
       return "/groups/\(id)"
     case .allGroups, .createGroup:
       return "/groups"
-    case .addFriendToGroup(let request):
+    case let .addFriendToGroup(request):
       return "/groups/\(request.groupId)"
 
     // Expense
@@ -99,11 +96,11 @@ extension BillSplitAPI: TargetType {
 
   var task: Task {
     switch self {
-    case .signup(let request as RequestParam),
-         .logIn(let request as RequestParam),
-         .addFriendToGroup(let request as RequestParam),
-         .createGroup(let request as RequestParam),
-         .addExpense(let request as RequestParam):
+    case let .signup(request as RequestParam),
+         let .logIn(request as RequestParam),
+         let .addFriendToGroup(request as RequestParam),
+         let .createGroup(request as RequestParam),
+         let .addExpense(request as RequestParam):
       return .requestParameters(parameters: request.JSON, encoding: JSONEncoding())
 
     case .getGroup, .allGroups, .signOut:
@@ -111,7 +108,7 @@ extension BillSplitAPI: TargetType {
     }
   }
 
-  var headers: [String : String]? {
+  var headers: [String: String]? {
     guard let token = UserDefaults.standard.string(forKey: "auth_token") else {
       return [:]
     }
@@ -119,26 +116,26 @@ extension BillSplitAPI: TargetType {
     case .signup, .logIn: return [:]
     default:
       return [
-        "Authorization": "Bearer \(token)"]
+        "Authorization": "Bearer \(token)",
+      ]
     }
   }
 
-   public var baseURL: URL { return URL(string: Natrium.Config.apiEndpoint)! }
+  public var baseURL: URL { return URL(string: Natrium.Config.apiEndpoint)! }
 }
 
 let loggerPlugin = NetworkLoggerPlugin(
   configuration: .init(formatter: .init(responseData: { (data) -> (String) in
     do {
       let dataAsJSON = try JSONSerialization.jsonObject(with: data)
-      let prettyData =  try JSONSerialization.data(withJSONObject: dataAsJSON, options: .prettyPrinted)
+      let prettyData = try JSONSerialization.data(withJSONObject: dataAsJSON, options: .prettyPrinted)
       return String(data: prettyData, encoding: .utf8)!
     } catch {
       // fallback to original data if it can't be serialized.
       return String(data: data, encoding: .utf8)!
     }
   }),
-  logOptions: .verbose)
+                       logOptions: .verbose)
 )
-
 
 let billApi = MoyaProvider<BillSplitAPI>(plugins: [loggerPlugin])
