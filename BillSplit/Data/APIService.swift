@@ -26,3 +26,25 @@ extension BillAPIService: AuthService {
     return billApi.rx.request(.login(params)).map(AuthResponse.self)
   }
 }
+
+extension BillAPIService: GroupRequest {
+  func all() -> Single<[Group]> {
+    billApi.rx.request(.allGroups).map([Group].self)
+  }
+}
+
+protocol ListableService {
+  associatedtype Item
+  func list(page: Int) -> Single<[Item]>
+}
+
+class ListableClosureService<Item>: ListableService {
+  let provider: () -> Single<[Item]>
+  init(provider: @escaping () -> Single<[Item]>) {
+    self.provider = provider
+  }
+
+  func list(page _: Int) -> Single<[Item]> {
+    return provider()
+  }
+}
