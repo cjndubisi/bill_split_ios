@@ -11,21 +11,25 @@ import XCTest
 
 class BalanceResolverTests: XCTestCase {
   func testResolver() {
-    let groupA = Group(users: ["a", "b", "c"], history: [
-      Bill(amount: 90, payer: "a", participants: ["a", "b", "c"]),
-      Bill(amount: 12, payer: "b", participants: ["a", "b", "c"]),
+    let UserA = User(id: 1, name: "a", email: "a@a.com")
+    let UserB = User(id: 2, name: "b", email: "b@b.com")
+    let UserC = User(id: 3, name: "c", email: "c@c.com")
+
+    let groupA = Group(users: [UserA, UserB, UserC], history: [
+      Bill(amount: 90, payerId: UserA.id, participants: [UserA, UserB, UserC]),
+      Bill(amount: 12, payerId: UserB.id, participants: [UserA, UserB, UserC]),
     ])
 
     let resolver = BalanceResolver()
     let result = resolver.resolve(from: groupA)
 
-    XCTAssertEqual(result["a"]?.gets, ["b": 30, "c": 30])
-    XCTAssertEqual(result["a"]?.debts, ["b": -4])
+    XCTAssertEqual(result[UserA]?.gets, [UserB: 30, UserC: 30])
+    XCTAssertEqual(result[UserA]?.debts, [UserB: -4])
 
-    XCTAssertEqual(result["b"]?.gets, ["a": 4, "c": 4])
-    XCTAssertEqual(result["b"]?.debts, ["a": -30])
+    XCTAssertEqual(result[UserB]?.gets, [UserA: 4, UserC: 4])
+    XCTAssertEqual(result[UserB]?.debts, [UserA: -30])
 
-    XCTAssertEqual(result["c"]?.gets, [:])
-    XCTAssertEqual(result["c"]?.debts, ["a": -30, "b": -4])
+    XCTAssertEqual(result[UserC]?.gets, [:])
+    XCTAssertEqual(result[UserC]?.debts, [UserA: -30, UserB: -4])
   }
 }

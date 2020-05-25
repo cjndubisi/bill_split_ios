@@ -26,4 +26,3 @@ extension BillAPIService: AuthService {
     return billApi.rx.request(.login(params)).map(AuthResponse.self)
   }
 }
-

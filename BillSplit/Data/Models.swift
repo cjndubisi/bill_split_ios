@@ -9,22 +9,25 @@
 import Foundation
 
 struct User: Codable {
+  var id: Int!
   let name: String
   let email: String
 }
 
+extension User: Hashable {}
+
 struct Bill {
   let amount: Double
-  let payer: String
-  let participants: [String]
+  let payerId: Int
+  let participants: [User]
 }
 
 struct Group {
-  let users: [String]
+  let users: [User]
   let history: [Bill]
 }
 
 struct Payment {
-  var gets: [String: Double] = [:]
-  var debts: [String: Double] = [:]
+  var gets: [User: Double] = [:]
+  var debts: [User: Double] = [:]
 }
