@@ -8,35 +8,6 @@
 
 import Foundation
 
-struct Bill {
-  let amount: Double
-  let payer: String
-  let participants: [String]
-}
-
-struct Group {
-  let users: [String]
-  let history: [Bill]
-}
-
-struct Payment {
-  var gets: [String: Double] = [:]
-  var debts: [String: Double] = [:]
-}
-
-extension Group {
-  func balances() -> [String: Payment] {
-    let resolver = BalanceResolver()
-
-    return resolver.resolve(from: self)
-  }
-}
-
-// let groupA = Group(users: ["a", "b", "c"], history: [
-//    Bill(amount: 90,payer: "a", participants: ["a", "b", "c"]),
-//    Bill(amount: 12,payer: "b", participants: ["a", "b", "c"]),
-// ])
-
 /**
  ```
  let groupA = Group(
@@ -102,5 +73,13 @@ struct BalanceResolver {
     }
 
     return details
+  }
+}
+
+extension Group {
+  func balances() -> [String: Payment] {
+    let resolver = BalanceResolver()
+
+    return resolver.resolve(from: self)
   }
 }
