@@ -15,7 +15,7 @@ target 'BillSplit' do
   pod 'NVActivityIndicatorView'
 
   # Networking
-  pod 'Moya'
+  pod 'Moya/RxSwift'
 
   # Build Tools
   pod 'Natrium'

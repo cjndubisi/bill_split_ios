@@ -12,6 +12,7 @@ import RxSwift
 
 class SignUpController: FormViewController {
   let viewModel: SignUpViewModel
+  let disposeBag = DisposeBag()
 
   required init(viewModel: SignUpViewModel) {
     self.viewModel = viewModel
@@ -40,15 +41,19 @@ class SignUpController: FormViewController {
 }
 
 protocol AuthService {
-  func signUp(_ reqeust: AuthParameter) -> Observable<AuthResponse>
+  func signUp(params: AuthParameter) -> Single<AuthResponse>
 }
 
 class BillAPIService {}
 
 extension BillAPIService: AuthService {
-  func signUp(_: AuthParameter) -> Observable<AuthResponse> {
-    return .empty()
+  func signUp(params: AuthParameter) -> Single<AuthResponse> {
+    return billApi.rx.request(.signup(params)).map(AuthResponse.self)
   }
+}
+
+struct Constants {
+  static let tokenKey = "auth_token"
 }
 
 class SignUpViewModel: ViewModel {
@@ -78,11 +83,16 @@ class SignUpViewModel: ViewModel {
       .do(onNext: {
         weakSelf?.coordinatorDelegate.onNext(.startAnimating)
     })
-      .flatMap { _ -> Observable<AuthResponse> in
-        guard let self = weakSelf else { return .empty() }
-        return self.service.signUp(AuthParameter(name: self.name, email: self.email, password: self.password))
+      .flatMap { _ -> Single<AuthResponse> in
+        guard let self = weakSelf else { return .never() }
+
+        let params = AuthParameter(name: self.name, email: self.email, password: self.password)
+        return self.service.signUp(params: params)
       }
-      .subscribe()
+      .subscribe(onNext: { response in
+        UserDefaults.standard.setValue(response.token, forKey: Constants.tokenKey)
+        weakSelf?.coordinatorDelegate.onNext(.navigate(.home))
+    })
 
     disposables = CompositeDisposable(disposables: [actionToken])
   }

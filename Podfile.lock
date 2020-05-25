@@ -2,10 +2,11 @@ PODS:
   - Alamofire (5.1.0)
   - Differentiator (4.0.1)
   - Eureka (5.2.1)
-  - Moya (14.0.0):
-    - Moya/Core (= 14.0.0)
   - Moya/Core (14.0.0):
     - Alamofire (~> 5.0)
+  - Moya/RxSwift (14.0.0):
+    - Moya/Core
+    - RxSwift (~> 5.0)
   - Natrium (7.2.4)
   - NVActivityIndicatorView (4.8.0):
     - NVActivityIndicatorView/Presenter (= 4.8.0)
@@ -29,7 +30,7 @@ PODS:
 
 DEPENDENCIES:
   - Eureka
-  - Moya
+  - Moya/RxSwift
   - Natrium
   - NVActivityIndicatorView
   - RxCocoa
@@ -76,6 +77,6 @@ SPEC CHECKSUMS:
   SwiftLint: 22ccbbe3b8008684be5955693bab135e0ed6a447
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: 29a31d3af42278f62454a78ac520fadaceb54646
+PODFILE CHECKSUM: f383033c73c44332cfe8fceb1e229b79b6e39fa8
 
 COCOAPODS: 1.9.2
