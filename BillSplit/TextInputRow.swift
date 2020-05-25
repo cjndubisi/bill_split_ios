@@ -71,6 +71,11 @@ class TextInputCell: Cell<String>, CellType {
 }
 
 extension TextInputCell: UITextFieldDelegate {
+  func textFieldDidBeginEditing(_: UITextField) {
+    backgroundColor = .white
+    row.cleanValidationErrors()
+  }
+
   func textFieldDidEndEditing(_ textField: UITextField) {
     row.value = textField.text
     formViewController()?.endEditing(of: self)
@@ -94,6 +99,11 @@ final class TextInputRow: Row<TextInputCell>, NoValueDisplayTextConformance, Row
 
   private func setup() {
     cellProvider = .init()
+  }
+
+  override func updateCell() {
+    super.updateCell()
+    validationOptions = .validatesOnDemand
   }
 }
 

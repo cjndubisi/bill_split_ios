@@ -66,6 +66,8 @@ class AuthenticationCoordinator: BaseCoordinator {
   }
 
   func route(to scene: Scene) {
+    // ensure not animating
+    NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
     switch scene {
     case .login: loginScene()
     case .signup: signupScene()
