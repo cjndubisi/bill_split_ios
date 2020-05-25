@@ -112,11 +112,14 @@ extension BillSplitAPI: TargetType {
   }
 
   var headers: [String : String]? {
+    guard let token = UserDefaults.standard.string(forKey: "auth_token") else {
+      return [:]
+    }
     switch self {
     case .signup, .logIn: return [:]
     default:
       return [
-        "Authorization": UserDefaults.standard.string(forKey: "auth_token") ?? "" ]
+        "Authorization": "Bearer \(token)"]
     }
   }
 
