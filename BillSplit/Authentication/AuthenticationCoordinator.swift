@@ -19,13 +19,11 @@ class AuthenticationCoordinator: BaseCoordinator {
     let viewModel = AuthViewModel()
     let controller = AuthenticationController(viewModel: viewModel)
 
-    viewModel.actionObservable
+    viewModel.coordinatorDelegate
       .observeOn(MainScheduler.instance)
       .subscribe(onNext: {
-        switch $0 {
-        case .login: self.loginFlow()
-        case .signup: self.signupFlow()
-        }
+        guard case let .navigate(scene) = $0 else { return }
+        self.route(to: scene)
     }).disposed(by: controller.disposeBag)
 
     self.controller = controller
@@ -35,7 +33,7 @@ class AuthenticationCoordinator: BaseCoordinator {
 
   // MARK: Router
 
-  private func loginFlow() {
+  private func loginScene() {
     navigationController.pushViewController(loginController, animated: true)
   }
 
@@ -44,7 +42,7 @@ class AuthenticationCoordinator: BaseCoordinator {
     // start home coordinator with nav.setViewController
   }
 
-  func signupFlow() {
+  func signupScene() {
     let service = BillAPIService()
     let viewModel = SignUpViewModel(service: service)
     let controller = SignUpController(viewModel: viewModel)
@@ -69,9 +67,11 @@ class AuthenticationCoordinator: BaseCoordinator {
 
   func route(to scene: Scene) {
     switch scene {
-    case .home:
-      homeFlow()
-    default: break
+    case .login: loginScene()
+    case .signup: signupScene()
+    case .home: homeFlow()
+    default:
+      break
     }
   }
 }

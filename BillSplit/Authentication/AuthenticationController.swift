@@ -11,7 +11,7 @@ import RxSwift
 import Stevia
 class AuthViewModel: ViewModel {
   let actionObserver: AnyObserver<Action>
-  let actionObservable: Observable<Action>
+  let coordinatorDelegate: Observable<CoordinatorDelegate>
 
   enum Action {
     case signup
@@ -21,7 +21,12 @@ class AuthViewModel: ViewModel {
   init() {
     let actionSubject = PublishSubject<Action>()
 
-    actionObservable = actionSubject.asObservable()
+    coordinatorDelegate = actionSubject.map {
+      switch $0 {
+      case .signup: return .navigate(.signup)
+      case .login: return .navigate(.login)
+      }
+    }
     actionObserver = actionSubject.asObserver()
   }
 }
