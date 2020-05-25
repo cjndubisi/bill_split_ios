@@ -31,8 +31,8 @@ class TextInputCell: Cell<String>, CellType {
     sv(inputNameLabel, inputTextField)
     equal(widths: inputNameLabel, inputTextField)
 
-    inputTextField.height(20).fillHorizontally(m: 30)
-    inputNameLabel.height(30).fillHorizontally(m: 30)
+    inputNameLabel.height(20).fillHorizontally(m: 30)
+    inputTextField.height(30).fillHorizontally(m: 30)
     layout(8, inputNameLabel!, 10, inputTextField!, 8)
 
     inputNameLabel.font = .systemFont(ofSize: 12)
