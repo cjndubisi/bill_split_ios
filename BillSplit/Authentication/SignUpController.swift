@@ -40,27 +40,6 @@ class SignUpController: FormViewController {
   }
 }
 
-protocol AuthService {
-  func signUp(params: AuthParameter) -> Single<AuthResponse>
-  func login(params: AuthParameter) -> Single<AuthResponse>
-}
-
-class BillAPIService {}
-
-extension BillAPIService: AuthService {
-  func signUp(params: AuthParameter) -> Single<AuthResponse> {
-    return billApi.rx.request(.signup(params)).map(AuthResponse.self)
-  }
-
-  func login(params: AuthParameter) -> Single<AuthResponse> {
-    return billApi.rx.request(.login(params)).map(AuthResponse.self)
-  }
-}
-
-struct Constants {
-  static let tokenKey = "auth_token"
-}
-
 class SignUpViewModel: ViewModel {
   private(set) var name: String = ""
   private(set) var email: String = ""

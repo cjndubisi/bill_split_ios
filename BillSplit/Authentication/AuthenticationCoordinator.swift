@@ -11,7 +11,7 @@ import RxSwift
 import UIKit
 
 class AuthenticationCoordinator: BaseCoordinator {
-  private var service: BillAPIService = BillAPIService()
+  private var service: AuthService = BillAPIService()
   // swiftlint:disable:next weak_delegate
   var parentDelegate: ((ApplicationCoordinatorDelegate) -> Void)!
 
