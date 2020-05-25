@@ -42,6 +42,7 @@ class SignUpController: FormViewController {
 
 protocol AuthService {
   func signUp(params: AuthParameter) -> Single<AuthResponse>
+  func login(params: AuthParameter) -> Single<AuthResponse>
 }
 
 class BillAPIService {}
@@ -49,6 +50,10 @@ class BillAPIService {}
 extension BillAPIService: AuthService {
   func signUp(params: AuthParameter) -> Single<AuthResponse> {
     return billApi.rx.request(.signup(params)).map(AuthResponse.self)
+  }
+
+  func login(params: AuthParameter) -> Single<AuthResponse> {
+    return billApi.rx.request(.login(params)).map(AuthResponse.self)
   }
 }
 

@@ -11,10 +11,7 @@ import RxSwift
 import UIKit
 
 class AuthenticationCoordinator: BaseCoordinator {
-  private var controller: AuthenticationController!
-  private lazy var loginController: UIViewController = UIViewController(nibName: nil, bundle: nil)
-  private weak var signUpController: SignUpController!
-
+  private var service: BillAPIService = BillAPIService()
   // swiftlint:disable:next weak_delegate
   var parentDelegate: ((ApplicationCoordinatorDelegate) -> Void)!
 
@@ -29,7 +26,6 @@ class AuthenticationCoordinator: BaseCoordinator {
         self?.route(to: scene)
     }).disposed(by: controller.disposeBag)
 
-    self.controller = controller
     navigationController.isNavigationBarHidden = true
     navigationController.setViewControllers([controller], animated: false)
   }
@@ -37,11 +33,27 @@ class AuthenticationCoordinator: BaseCoordinator {
   // MARK: Router
 
   private func loginScene() {
-    navigationController.pushViewController(loginController, animated: true)
+    let viewModel = LoginViewModel(service: service)
+    let controller = LoginController(viewModel: viewModel)
+    let delegate = PublishSubject<CoordinatorDelegate>()
+
+    delegate.subscribe(onNext: { [weak self] in
+      switch $0 {
+      case .startAnimating:
+        NVActivityIndicatorPresenter.sharedInstance.startAnimating(.init())
+      case .endAnimating:
+        NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
+      case let .navigate(scene):
+        self?.route(to: scene)
+      }
+    }).disposed(by: controller.disposeBag)
+
+    // retains controller
+    navigationController.pushViewController(controller, animated: true)
+    viewModel.coordinatorDelegate = delegate.asObserver()
   }
 
   func signupScene() {
-    let service = BillAPIService()
     let viewModel = SignUpViewModel(service: service)
     let controller = SignUpController(viewModel: viewModel)
     let delegate = PublishSubject<CoordinatorDelegate>()
@@ -57,10 +69,9 @@ class AuthenticationCoordinator: BaseCoordinator {
       }
     }).disposed(by: controller.disposeBag)
 
+    // retains controller
     navigationController.pushViewController(controller, animated: true)
     viewModel.coordinatorDelegate = delegate.asObserver()
-
-    signUpController = controller
   }
 
   func route(to scene: Scene) {

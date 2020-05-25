@@ -17,3 +17,5 @@ class HomeCoordinator: BaseCoordinator {
     navigationController.setViewControllers([controller], animated: true)
   }
 }
+
+class HomeViewModel: ViewModel {}
