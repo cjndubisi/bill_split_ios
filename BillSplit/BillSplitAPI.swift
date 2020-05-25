@@ -49,7 +49,7 @@ extension RequestParam {
 
 enum BillSplitAPI {
   case signup(AuthParameter)
-  case logIn(AuthParameter)
+  case login(AuthParameter)
   case signOut
 
   // Groups
@@ -67,7 +67,7 @@ extension BillSplitAPI: TargetType {
     switch self {
     case .signup:
       return "/users/signup"
-    case .logIn:
+    case .login:
       return "/users/login"
     case .signOut:
       return "/users/signout"
@@ -88,7 +88,7 @@ extension BillSplitAPI: TargetType {
 
   var method: Method {
     switch self {
-    case .signup, .logIn, .signOut, .createGroup, .addFriendToGroup, .addExpense:
+    case .signup, .login, .signOut, .createGroup, .addFriendToGroup, .addExpense:
       return .post
     case .getGroup, .allGroups:
       return .get
@@ -102,7 +102,7 @@ extension BillSplitAPI: TargetType {
   var task: Task {
     switch self {
     case let .signup(request as RequestParam),
-         let .logIn(request as RequestParam),
+         let .login(request as RequestParam),
          let .addFriendToGroup(request as RequestParam),
          let .createGroup(request as RequestParam),
          let .addExpense(request as RequestParam):
@@ -118,7 +118,7 @@ extension BillSplitAPI: TargetType {
       return [:]
     }
     switch self {
-    case .signup, .logIn: return [:]
+    case .signup, .login: return [:]
     default:
       return [
         "Authorization": "Bearer \(token)",
