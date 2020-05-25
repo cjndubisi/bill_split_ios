@@ -25,4 +25,18 @@ class BaseCoordinator: Coordinator {
   func start() {}
 }
 
+enum Scene {
+  case splash
+  case login
+  case signup
+  case home
+  case group
+}
+
+enum CoordinatorDelegate {
+  case navigate(Scene)
+  case startAnimating
+  case endAnimating
+}
+
 protocol ViewModel {}

@@ -7,6 +7,8 @@
 //
 
 import Eureka
+import RxCocoa
+import RxSwift
 
 class SignUpController: FormViewController {
   let viewModel: SignUpViewModel
@@ -37,10 +39,53 @@ class SignUpController: FormViewController {
   }
 }
 
+protocol AuthService {
+  func signUp(_ reqeust: AuthParameter) -> Observable<AuthResponse>
+}
+
+class BillAPIService {}
+
+extension BillAPIService: AuthService {
+  func signUp(_: AuthParameter) -> Observable<AuthResponse> {
+    return .empty()
+  }
+}
+
 class SignUpViewModel: ViewModel {
   private(set) var name: String = ""
   private(set) var email: String = ""
   private(set) var password: String = ""
+
+  private let service: AuthService
+
+  // swiftlint:disable:next weak_delegate
+  var coordinatorDelegate: AnyObserver<CoordinatorDelegate>!
+
+  // View Actions
+  let signupAction: AnyObserver<Void>
+
+  private(set) var disposables: CompositeDisposable!
+
+  init(service: AuthService) {
+    let actionSubject = PublishSubject<Void>()
+
+    self.service = service
+    signupAction = actionSubject.asObserver()
+
+    weak var weakSelf = self
+
+    let actionToken = actionSubject
+      .do(onNext: {
+        weakSelf?.coordinatorDelegate.onNext(.startAnimating)
+    })
+      .flatMap { _ -> Observable<AuthResponse> in
+        guard let self = weakSelf else { return .empty() }
+        return self.service.signUp(AuthParameter(name: self.name, email: self.email, password: self.password))
+      }
+      .subscribe()
+
+    disposables = CompositeDisposable(disposables: [actionToken])
+  }
 
   func form() -> Form {
     let form = Form()

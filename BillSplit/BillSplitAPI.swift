@@ -8,6 +8,11 @@
 
 import Moya
 
+struct AuthResponse: Codable {
+  let user: User
+  let token: String
+}
+
 struct AuthParameter: RequestParam {
   var name: String?
   let email: String

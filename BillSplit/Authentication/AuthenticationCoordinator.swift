@@ -11,8 +11,8 @@ import UIKit
 
 class AuthenticationCoordinator: BaseCoordinator {
   private var controller: AuthenticationController!
-  private var loginController: UIViewController = UIViewController(nibName: nil, bundle: nil)
-  private var signUpController: UIViewController = SignUpController(viewModel: .init())
+  private lazy var loginController: UIViewController = UIViewController(nibName: nil, bundle: nil)
+  private lazy var signUpController: UIViewController = SignUpController(viewModel: .init(service: BillAPIService()))
 
   override func start() {
     let viewModel = AuthViewModel()
