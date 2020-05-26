@@ -31,6 +31,7 @@ class HomeController: UITableViewController {
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     set(title: "Groups")
+    navigationController?.setNavigationBarOpaque()
   }
 
   func bindViewModel() {
@@ -42,12 +43,13 @@ class HomeController: UITableViewController {
     // Bind Refreshing
     refreshControl.rx.controlEvent(.valueChanged)
       .bind(to: viewModel.dataSource.reload).disposed(by: disposeBag)
-    viewModel.dataSource.fetching
+    viewModel.dataSource.fetching.observeOn(MainScheduler.instance)
       .bind(to: refreshControl.rx.isRefreshing).disposed(by: disposeBag)
 
     // On Subscribe will fetch data from network.
     viewModel.dataSource.value
       .map({ [AnimatableSectionModel(model: "basiclist", items: $0)] })
+      .observeOn(MainScheduler.instance)
       .bind(to: tableView.rx.items(dataSource: tableViewDataSource())).disposed(by: disposeBag)
 
     tableView.rx.modelSelected(Group.self)
