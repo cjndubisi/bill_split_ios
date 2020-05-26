@@ -17,6 +17,7 @@ protocol AuthService {
 protocol GroupRequest: AnyObject {
   func all() -> Single<[Group]>
   func add(expense: ExpenseRequest) -> Single<Bill>
+  func add(member: MemberRequest) -> Single<[User]>
   func get(group: Int) -> Single<Group>
 }
 
@@ -59,6 +60,10 @@ extension BillAPIService: GroupRequest {
 
   func get(group: Int) -> Single<Group> {
     billApi.rx.request(.getGroup(group)).mapServerError().map(Group.self)
+  }
+
+  func add(member: MemberRequest) -> Single<[User]> {
+    billApi.rx.request(.addFriendToGroup(member)).mapServerError().map(Group.self).map({ $0.users })
   }
 
   func add(expense: ExpenseRequest) -> Single<Bill> {

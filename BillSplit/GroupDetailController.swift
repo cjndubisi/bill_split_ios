@@ -30,7 +30,13 @@ class GroupDetailController: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    let barItem = UIBarButtonItem()
+    barItem.title = "Settings"
+
+    navigationItem.rightBarButtonItem = barItem
     navigationItem.largeTitleDisplayMode = .never
+
     removeBackText()
     setupHeader()
     bindViewModel()
@@ -91,6 +97,10 @@ class GroupDetailController: UITableViewController {
     tableView.dataSource = nil
     tableHeader.titleLabel.text = viewModel.title
     tableHeader.subtitleLabel.text = viewModel.subtitle
+
+    navigationItem.rightBarButtonItem?.rx.tap
+      .map { [unowned viewModel] in .navigate(.members(viewModel.group)) }
+      .bind(to: viewModel.coordinatorDelegate).disposed(by: disposeBag)
 
     tableHeader.addExpenseButton.rx.tap.observeOn(MainScheduler.instance)
       .map { .navigate(.expenseInput) }

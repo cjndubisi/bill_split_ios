@@ -6,13 +6,13 @@
 //  Copyright © 2020 Chijioke. All rights reserved.
 //
 
+import Eureka
 import RxSwift
 import Stevia
 
 class HomeCoordinator: BaseCoordinator {
   // swiftlint:disable weak_delegate
   var parentDelegate: ((ApplicationCoordinatorDelegate) -> Void)!
-  let delegate = PublishSubject<CoordinatorDelegate>()
   // swiftlint:enable weak_delegate
 
   let service: GroupRequest
@@ -25,6 +25,7 @@ class HomeCoordinator: BaseCoordinator {
   override func start() {
     let viewModel: HomeViewModel = HomeViewModel(service: service)
     let controller = HomeController(viewModel: viewModel)
+    let delegate = PublishSubject<CoordinatorDelegate>()
 
     viewModel.coordinatorDelegate = delegate.asObserver()
     delegate.subscribe(onNext: { [weak self] in
@@ -43,21 +44,16 @@ class HomeCoordinator: BaseCoordinator {
     let viewModel: GroupDetailViewModel = .init(service: service, group: group)
     let controller = GroupDetailController(viewModel: viewModel)
     let alertController = expenseInput(for: group, viewModel: viewModel, controller: controller)
+    let delegate = PublishSubject<CoordinatorDelegate>()
 
     viewModel.coordinatorDelegate = delegate.asObserver()
     delegate.subscribe(onNext: { [weak self] in
-      switch $0 {
-      case let .navigate(scene):
-        switch scene {
-        case .expenseInput:
-          self?.navigationController.present(alertController, animated: true, completion: nil)
-        case let .groupBalance(group):
-          self?.balanceScene(for: group)
-        default:
-          break
-        }
-      default: break
+      guard case let .navigate(scene) = $0 else { return }
+      if case .expenseInput = scene {
+        self?.navigationController.present(alertController, animated: true, completion: nil)
+        return
       }
+      self?.route(to: scene)
     }).disposed(by: controller.disposeBag)
 
     navigationController.pushViewController(controller, animated: true)
@@ -66,6 +62,25 @@ class HomeCoordinator: BaseCoordinator {
   func balanceScene(for group: Group) {
     let viewModel = BalanceViewModel(group: group)
     let controller = BalanceController(viewModel: viewModel)
+
+    navigationController.pushViewController(controller, animated: true)
+  }
+
+  func membersScene(for group: Group) {
+    let viewModel = MembersViewModel(service: service, group: group)
+    let controller = MembersController(viewModel: viewModel)
+    let alertController = addMember(to: group, viewModel: viewModel, controller: controller)
+    let delegate = PublishSubject<CoordinatorDelegate>()
+
+    viewModel.coordinatorDelegate = delegate.asObserver()
+    delegate.subscribe(onNext: { [weak self] in
+      guard case let .navigate(scene) = $0 else { return }
+      if case .addMember = scene {
+        self?.navigationController.present(alertController, animated: true, completion: nil)
+        return
+      }
+      self?.route(to: scene)
+    }).disposed(by: controller.disposeBag)
 
     navigationController.pushViewController(controller, animated: true)
   }
@@ -115,11 +130,56 @@ class HomeCoordinator: BaseCoordinator {
     return alertController
   }
 
+  // TODO: Clean up duplicate.
+  private func addMember(to group: Group,
+                         viewModel: MembersViewModel,
+                         controller: MembersController) -> UIViewController {
+    let groupId = group.id
+    let alertController = UIAlertController(title: "Add Member", message: nil, preferredStyle: .alert)
+
+    alertController.addTextField { textField in
+      textField.placeholder = "Name"
+      textField.tag = 1
+    }
+    alertController.addTextField { textField in
+      textField.placeholder = "Email"
+      textField.tag = 2
+      textField.keyboardType = .decimalPad
+    }
+    alertController.addAction(.init(title: "Cancel", style: .cancel, handler: nil))
+    alertController.addAction(.init(title: "Add", style: .default) {
+      [unowned alertController,
+       unowned controller,
+       weak viewModel] _ in
+
+      let nameField = alertController.textFields?.first(where: { $0.tag == 1 })
+      let emailField = alertController.textFields?.first(where: { $0.tag == 2 })
+
+      guard let email = emailField?.text!, RuleEmail().isValid(value: email) == nil,
+        let name = nameField?.text, !name.isEmpty
+      else { return }
+
+      let request = MemberRequest(
+        name: name,
+        email: email,
+        groupId: groupId
+      )
+
+      viewModel?.add(member: request).disposed(by: controller.disposeBag)
+    })
+
+    return alertController
+  }
+
   func route(to scene: Scene) {
     switch scene {
     case let .groupDetail(id): groupDetailScene(with: id)
     case .splash:
       parentDelegate?(.authFlow)
+    case let .groupBalance(group):
+      balanceScene(for: group)
+    case let .members(group):
+      membersScene(for: group)
     default: break
     }
   }

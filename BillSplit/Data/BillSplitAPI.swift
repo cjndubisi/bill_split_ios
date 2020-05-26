@@ -23,8 +23,9 @@ struct GroupRequestParam: RequestParam {
   let name: String
 }
 
-struct FriendRequest: RequestParam {
+struct MemberRequest: RequestParam {
   let name: String
+  let email: String
   let groupId: Int
 }
 
@@ -57,7 +58,7 @@ enum BillSplitAPI {
   case getGroup(Int)
   case allGroups
   case createGroup(GroupRequestParam)
-  case addFriendToGroup(FriendRequest)
+  case addFriendToGroup(MemberRequest)
 
   // Expense
   case addExpense(ExpenseRequest)

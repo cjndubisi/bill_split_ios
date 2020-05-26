@@ -33,6 +33,7 @@
 		4FE0EA98247CFC670005E715 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE0EA97247CFC670005E715 /* HomeController.swift */; };
 		4FE0EA9A247D1EFE0005E715 /* GroupDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE0EA99247D1EFE0005E715 /* GroupDetailController.swift */; };
 		4FE0EA9C247D4DFA0005E715 /* BalanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE0EA9B247D4DFA0005E715 /* BalanceController.swift */; };
+		4FE0EA9E247D8A580005E715 /* MembersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE0EA9D247D8A570005E715 /* MembersController.swift */; };
 		77E84CD5D50F028D42E70CE7 /* Pods_BillSplitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3786F92783661ADD5F78B7E6 /* Pods_BillSplitTests.framework */; };
 		B5AF234885EA95715EBA714E /* Pods_BillSplit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E680DAD983128928C79641A /* Pods_BillSplit.framework */; };
 /* End PBXBuildFile section */
@@ -81,6 +82,7 @@
 		4FE0EA97247CFC670005E715 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		4FE0EA99247D1EFE0005E715 /* GroupDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailController.swift; sourceTree = "<group>"; };
 		4FE0EA9B247D4DFA0005E715 /* BalanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceController.swift; sourceTree = "<group>"; };
+		4FE0EA9D247D8A570005E715 /* MembersController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersController.swift; sourceTree = "<group>"; };
 		53446205D4D4D5E4F82D848B /* Pods-BillSplit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BillSplit.release.xcconfig"; path = "Target Support Files/Pods-BillSplit/Pods-BillSplit.release.xcconfig"; sourceTree = "<group>"; };
 		82FCFF8898AF4DD176A2041A /* Pods-BillSplit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BillSplit.debug.xcconfig"; path = "Target Support Files/Pods-BillSplit/Pods-BillSplit.debug.xcconfig"; sourceTree = "<group>"; };
 		8F751362FC61D74CA8054BE4 /* Pods-BillSplitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BillSplitTests.debug.xcconfig"; path = "Target Support Files/Pods-BillSplitTests/Pods-BillSplitTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				4FE0EA99247D1EFE0005E715 /* GroupDetailController.swift */,
 				4FE0EA9B247D4DFA0005E715 /* BalanceController.swift */,
 				4FDF3952247AB7D4003AEE03 /* BalanceResolver.swift */,
+				4FE0EA9D247D8A570005E715 /* MembersController.swift */,
 				4FDF3975247C0654003AEE03 /* Constants.swift */,
 				4FDF3938247AA945003AEE03 /* LaunchScreen.storyboard */,
 				4FDF3962247AFD06003AEE03 /* Authentication */,
@@ -455,6 +458,7 @@
 				4FDF396E247B15E8003AEE03 /* TextInputRow.swift in Sources */,
 				4FDF3974247BF227003AEE03 /* HomeCoordinator.swift in Sources */,
 				4FDF396B247AFDA8003AEE03 /* SignUpController.swift in Sources */,
+				4FE0EA9E247D8A580005E715 /* MembersController.swift in Sources */,
 				4FDF3976247C0654003AEE03 /* Constants.swift in Sources */,
 				4FDF3978247C0675003AEE03 /* APIService.swift in Sources */,
 				4FE0EA9C247D4DFA0005E715 /* BalanceController.swift in Sources */,

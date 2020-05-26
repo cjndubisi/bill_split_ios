@@ -34,6 +34,8 @@ enum Scene {
   case groupDetail(Group)
   case expenseInput
   case groupBalance(Group)
+  case members(Group)
+  case addMember
 }
 
 extension Scene: Equatable {}

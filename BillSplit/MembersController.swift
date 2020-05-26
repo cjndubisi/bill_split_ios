@@ -1,5 +1,5 @@
 //
-//  HomeController.swift
+//  MembersController.swift
 //  BillSplit
 //
 //  Created by Chijioke on 5/26/20.
@@ -10,11 +10,11 @@ import RxCocoa
 import RxDataSources
 import RxSwift
 
-class HomeController: UITableViewController {
-  let viewModel: HomeViewModel
+class MembersController: UITableViewController {
+  let viewModel: MembersViewModel
   let disposeBag = DisposeBag()
 
-  required init(viewModel: HomeViewModel) {
+  required init(viewModel: MembersViewModel) {
     self.viewModel = viewModel
     super.init(style: .plain)
   }
@@ -27,15 +27,17 @@ class HomeController: UITableViewController {
     super.viewDidLoad()
 
     let barItem = UIBarButtonItem()
-    barItem.title = "Logout"
+
+    barItem.title = "Add Member"
     navigationItem.rightBarButtonItem = barItem
+    navigationItem.largeTitleDisplayMode = .always
 
     bindViewModel()
   }
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    set(title: "Groups")
+    set(title: "Members")
     navigationController?.setNavigationBarOpaque()
   }
 
@@ -57,7 +59,7 @@ class HomeController: UITableViewController {
 
     // On Subscribe will fetch data from network.
     viewModel.dataSource.value
-      .map({ [AnimatableSectionModel(model: "basiclist", items: $0)] })
+      .map({ [AnimatableSectionModel(model: "memberList", items: $0)] })
       .observeOn(MainScheduler.instance)
       .bind(to: tableView.rx.items(dataSource: tableViewDataSource())).disposed(by: disposeBag)
 
@@ -69,35 +71,45 @@ class HomeController: UITableViewController {
   }
 
   private func tableViewDataSource() -> RxTableViewSectionedAnimatedDataSource<
-    AnimatableSectionModel<String, Group>
+    AnimatableSectionModel<String, User>
   > {
     return RxTableViewSectionedAnimatedDataSource<
-      AnimatableSectionModel<String, Group>
+      AnimatableSectionModel<String, User>
     >(configureCell: { (_, tableView, _, item) -> UITableViewCell in
       var cell: UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.resuseIdentifier)
       if cell == nil {
-        cell = UITableViewCell(style: .value1, reuseIdentifier: UITableViewCell.resuseIdentifier)
+        cell = UITableViewCell(style: .subtitle, reuseIdentifier: UITableViewCell.resuseIdentifier)
       }
       cell.textLabel?.text = item.name
-      cell.detailTextLabel?.text = String(format: NSLocalizedString("member_count", comment: ""), item.users.count)
+      cell.detailTextLabel?.text = item.email
       cell.selectionStyle = .none
-      cell.accessoryType = .disclosureIndicator
 
       return cell
     })
   }
 }
 
-class HomeViewModel: ViewModel {
-  let dataSource: DataSource<ListableClosureService<Group>>
+class MembersViewModel: ViewModel {
+  let dataSource: DataSource<ListableClosureService<User>>
   let service: GroupRequest
   // swiftlint:disable:next weak_delegate
   var coordinatorDelegate: AnyObserver<CoordinatorDelegate>!
 
-  init(service: GroupRequest) {
+  init(service: GroupRequest, group: Group) {
+    let id = group.id
     self.service = service
     dataSource = DataSource(
-      source: ListableClosureService<Group> { [weak service] in service?.all() ?? .never() }
+      source: ListableClosureService<User> { [weak service] in service?.get(group: id).map({ $0.users }) ?? .never() }
     )
+  }
+
+  func add(member request: MemberRequest) -> Disposable {
+    return service.add(member: request).map { _ in () }
+      .observeOn(MainScheduler.instance)
+      .catchError({ [weak self] error in
+        self?.coordinatorDelegate.onNext(.error(error))
+        return .never()
+      })
+      .asObservable().subscribe(dataSource.reload)
   }
 }

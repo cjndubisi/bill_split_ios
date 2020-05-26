@@ -8,6 +8,14 @@
 
 import RxDataSources
 
+extension User: IdentifiableType {
+  typealias Identity = Int
+
+  var identity: Int {
+    return id
+  }
+}
+
 extension Group: IdentifiableType {
   typealias Identity = Int
 
