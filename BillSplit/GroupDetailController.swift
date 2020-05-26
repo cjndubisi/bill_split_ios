@@ -30,6 +30,7 @@ class GroupDetailController: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    navigationItem.largeTitleDisplayMode = .never
     removeBackText()
     setupHeader()
     bindViewModel()
@@ -211,7 +212,7 @@ private class GroupHeaderView: UIView {
     )
 
     titleLabel.numberOfLines = 1
-    titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
+    titleLabel.font = .systemFont(ofSize: 34, weight: .heavy)
     subtitleLabel.numberOfLines = 5
     subtitleLabel.font = .systemFont(ofSize: 12)
     addExpenseButton.setTitle("Add Expense", for: .normal)

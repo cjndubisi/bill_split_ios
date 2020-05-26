@@ -76,4 +76,9 @@ extension NoBackTextController {
     title = ""
     navigationController?.navigationBar.topItem?.title = " "
   }
+
+  func set(title: String) {
+    self.title = title
+    navigationController?.navigationBar.topItem?.title = title
+  }
 }

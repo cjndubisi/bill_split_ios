@@ -43,6 +43,7 @@ class ApplicationCoordinator: Coordinator {
 
   func start() {
     let rootController = UINavigationController()
+    rootController.navigationBar.prefersLargeTitles = true
 
     defer {
       window.rootViewController = rootController

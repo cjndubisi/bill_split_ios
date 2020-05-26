@@ -28,6 +28,11 @@ class HomeController: UITableViewController {
     bindViewModel()
   }
 
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    set(title: "Groups")
+  }
+
   func bindViewModel() {
     let refreshControl = UIRefreshControl()
     tableView.delegate = nil

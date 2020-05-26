@@ -25,17 +25,13 @@ class BalanceController: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    removeBackText()
+    title = "Balances"
+    navigationItem.largeTitleDisplayMode = .always
     bindViewModel()
   }
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    navigationController?.setNavigationBarTransparent()
-  }
-
-  override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(animated)
     navigationController?.setNavigationBarOpaque()
   }
 
@@ -99,7 +95,7 @@ class BalanceViewModel {
     let verb = isGreater ? "gets back" : "owes"
     let amount = isGreater ? "$\(Double(round(100 * gets) / 100))" : "$\(Double(round(100 * debts) / 100))"
     let color = isGreater ? UIColor.green : UIColor.orange
-    let title = "\(user.name) \(verb) \(amount)"
+    let title = "\(user.name.capitalized) \(verb) \(amount)"
 
     let attributedTitle = NSMutableAttributedString(
       string: title,
@@ -121,14 +117,14 @@ class BalanceViewModel {
       guard let amount = gets[next], amount != 0 else {
         return nil
       }
-      return "\(next.name) owes $\(Double(round(100 * abs(amount)) / 100)) to \(user.name)"
+      return "\(next.name) owes $\(Double(round(100 * abs(amount)) / 100)) to \(user.name.capitalized)"
     }).joined(separator: "\n")
 
     let outflow = debts.compactMap({ (next, _) -> String? in
       guard let amount = debts[next], amount != 0 else {
         return nil
       }
-      return "\(next.name) owes $\(Double(round(100 * abs(amount)) / 100)) to \(user.name)"
+      return "\(next.name) owes $\(Double(round(100 * abs(amount)) / 100)) to \(user.name.capitalized)"
     }).joined(separator: "\n")
 
     return inflow + "\n" + outflow
