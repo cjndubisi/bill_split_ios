@@ -90,14 +90,14 @@ class GroupDetailController: UITableViewController {
     tableView.dataSource = nil
     tableHeader.titleLabel.text = viewModel.title
     tableHeader.subtitleLabel.text = viewModel.subtitle
-    tableHeader.addExpenseButton.rx.tap.observeOn(MainScheduler.instance)
-      .subscribe(onNext: { [weak viewModel] _ in
-        viewModel?.coordinatorDelegate.onNext(.navigate(.expenseInput))
-    }).disposed(by: disposeBag)
-    tableHeader.balanceButton.rx.tap.observeOn(MainScheduler.instance)
-      .subscribe(onNext: { _ in
 
-    }).disposed(by: disposeBag)
+    tableHeader.addExpenseButton.rx.tap.observeOn(MainScheduler.instance)
+      .map { .navigate(.expenseInput) }
+      .bind(to: viewModel.coordinatorDelegate).disposed(by: disposeBag)
+
+    tableHeader.balanceButton.rx.tap.observeOn(MainScheduler.instance)
+      .map { .navigate(.groupBalance) }
+      .bind(to: viewModel.coordinatorDelegate).disposed(by: disposeBag)
 
     viewModel.dataSource.value
       .map({ [AnimatableSectionModel(model: "bills", items: $0)] })

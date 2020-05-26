@@ -37,17 +37,46 @@ class HomeCoordinator: BaseCoordinator {
     navigationController.setViewControllers([controller], animated: true)
   }
 
-  // MARK: - Router
+  // MARK: - Routes
 
   private func groupDetailScene(with group: Group) {
     let viewModel: GroupDetailViewModel = .init(service: service, group: group)
     let controller = GroupDetailController(viewModel: viewModel)
-    let alertController = UIAlertController(title: "Add Expense", message: nil, preferredStyle: .alert)
+    let alertController = expenseInput(for: group, viewModel: viewModel, controller: controller)
 
-    // Do not capture `group` in closure.
+    viewModel.coordinatorDelegate = delegate.asObserver()
+    delegate.subscribe(onNext: { [weak self] in
+      switch $0 {
+      case let .navigate(scene):
+        switch scene {
+        case .expenseInput:
+          self?.navigationController.present(alertController, animated: true, completion: nil)
+        case .groupBalance:
+          self?.balanceScene(for: group)
+        default:
+          break
+        }
+      default: break
+      }
+    }).disposed(by: controller.disposeBag)
+
+    navigationController.pushViewController(controller, animated: true)
+  }
+
+  func balanceScene(for _: Group) {
+    let viewModel = BalanceViewModel()
+    let controller = BalanceController(viewModel: viewModel)
+
+    navigationController.pushViewController(controller, animated: true)
+  }
+
+  private func expenseInput(for group: Group,
+                            viewModel: GroupDetailViewModel,
+                            controller: GroupDetailController) -> UIViewController {
     let groupId = group.id
     let participants = group.users.map({ $0.id })
     let userID = UserDefaults.standard.integer(forKey: Constants.userID)
+    let alertController = UIAlertController(title: "Add Expense", message: nil, preferredStyle: .alert)
 
     alertController.addTextField { textField in
       textField.placeholder = "Name"
@@ -83,16 +112,7 @@ class HomeCoordinator: BaseCoordinator {
       viewModel?.add(expense: request).disposed(by: controller.disposeBag)
     })
 
-    viewModel.coordinatorDelegate = delegate.asObserver()
-    delegate.subscribe(onNext: { [weak self] in
-      switch $0 {
-      case let .navigate(scene):
-        guard case .expenseInput = scene else { self?.route(to: scene); return }
-        self?.navigationController.present(alertController, animated: true, completion: nil)
-      default: break
-      }
-    }).disposed(by: controller.disposeBag)
-    navigationController.pushViewController(controller, animated: true)
+    return alertController
   }
 
   func route(to scene: Scene) {

@@ -33,7 +33,10 @@ enum Scene {
   case group
   case groupDetail(Group)
   case expenseInput
+  case groupBalance
 }
+
+extension Scene: Equatable {}
 
 enum CoordinatorDelegate {
   case navigate(Scene)
