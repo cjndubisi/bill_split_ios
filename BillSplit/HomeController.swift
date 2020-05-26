@@ -25,7 +25,6 @@ class HomeController: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    tableView.register(DetailTableCell.self, forCellReuseIdentifier: DetailTableCell.resuseIdentifier)
     bindViewModel()
   }
 
@@ -58,8 +57,11 @@ class HomeController: UITableViewController {
   > {
     return RxTableViewSectionedAnimatedDataSource<
       AnimatableSectionModel<String, Group>
-    >(configureCell: { (_, tableView, index, item) -> UITableViewCell in
-      let cell = tableView.dequeueReusableCell(withIdentifier: DetailTableCell.resuseIdentifier, for: index)
+    >(configureCell: { (_, tableView, _, item) -> UITableViewCell in
+      var cell: UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.resuseIdentifier)
+      if cell == nil {
+        cell = UITableViewCell(style: .value1, reuseIdentifier: UITableViewCell.resuseIdentifier)
+      }
       cell.textLabel?.text = item.name
       cell.detailTextLabel?.text = String(format: NSLocalizedString("member_count", comment: ""), item.users.count)
       cell.selectionStyle = .none
@@ -81,15 +83,5 @@ class HomeViewModel: ViewModel {
     dataSource = DataSource(
       source: ListableClosureService<Group> { [weak service] in service?.all() ?? .never() }
     )
-  }
-}
-
-private final class DetailTableCell: UITableViewCell {
-  override init(style _: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-    super.init(style: .value1, reuseIdentifier: reuseIdentifier)
-  }
-
-  required init?(coder: NSCoder) {
-    super.init(coder: coder)
   }
 }
