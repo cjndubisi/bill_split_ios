@@ -41,10 +41,30 @@ extension UIView {
     }
     layer.addSublayer(border)
   }
+
+  func makeRound(radius: CGFloat? = nil) {
+    layoutIfNeeded()
+    layer.cornerRadius = radius ?? bounds.height / 2.0
+    layer.masksToBounds = true
+  }
 }
 
 extension UITableViewCell {
   static var resuseIdentifier: String {
     return String(describing: Self.self)
+  }
+}
+
+extension UINavigationController {
+  func setNavigationBarTransparent() {
+    isNavigationBarHidden = false
+    navigationBar.setBackgroundImage(UIImage(), for: .default)
+    navigationBar.shadowImage = UIImage()
+  }
+
+  func setNavigationBarOpaque() {
+    isNavigationBarHidden = false
+    navigationBar.setBackgroundImage(nil, for: .default)
+    navigationBar.shadowImage = nil
   }
 }

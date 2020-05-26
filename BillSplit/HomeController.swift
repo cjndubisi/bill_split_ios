@@ -45,6 +45,12 @@ class HomeController: UITableViewController {
     viewModel.dataSource.value
       .map({ [AnimatableSectionModel(model: "basiclist", items: $0)] })
       .bind(to: tableView.rx.items(dataSource: tableViewDataSource())).disposed(by: disposeBag)
+
+    tableView.rx.modelSelected(Group.self)
+      .map { CoordinatorDelegate.navigate(.groupDetail($0)) }
+      .bind(to: viewModel.coordinatorDelegate).disposed(by: disposeBag)
+
+    viewModel.dataSource.disposable.disposed(by: disposeBag)
   }
 
   private func tableViewDataSource() -> RxTableViewSectionedAnimatedDataSource<
@@ -67,6 +73,8 @@ class HomeController: UITableViewController {
 class HomeViewModel: ViewModel {
   let dataSource: DataSource<ListableClosureService<Group>>
   let service: GroupRequest
+  // swiftlint:disable:next weak_delegate
+  var coordinatorDelegate: AnyObserver<CoordinatorDelegate>!
 
   init(service: GroupRequest) {
     self.service = service

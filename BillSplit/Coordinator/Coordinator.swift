@@ -31,6 +31,7 @@ enum Scene {
   case signup
   case home
   case group
+  case groupDetail(Group)
 }
 
 enum CoordinatorDelegate {
