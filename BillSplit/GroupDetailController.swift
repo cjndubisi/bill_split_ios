@@ -58,30 +58,25 @@ class GroupDetailController: UITableViewController {
   }
 
   private func tableViewDataSource() -> RxTableViewSectionedAnimatedDataSource<
-    AnimatableSectionModel<String, Bill>
+    AnimatableSectionModel<String, GroupDetailItem>
   > {
     return RxTableViewSectionedAnimatedDataSource<
-      AnimatableSectionModel<String, Bill>
-    >(configureCell: { [unowned viewModel] (_, tableView, _, item) -> UITableViewCell in
-
-      let amount = item.amount
-      let payer = viewModel.users.first(where: { $0.id == item.payerId })!
-      let action = payer.id == viewModel.currentUser.id ? "lent" : "borrowed"
-      let perPerson = item.amount / Double(viewModel.users.count)
+      AnimatableSectionModel<String, GroupDetailItem>
+    >(configureCell: { (_, tableView, _, item) -> UITableViewCell in
       let cell = tableView.dequeueReusableCell(
         withIdentifier: UITableViewCell.resuseIdentifier
       ) ?? UITableViewCell(style: .subtitle, reuseIdentifier: UITableViewCell.resuseIdentifier)
       let rightTextlabel = cell.accessoryView as? UILabel ?? UILabel()
 
-      rightTextlabel.text = "you \(action)\n$\(perPerson * Double(viewModel.users.count - 1))"
+      rightTextlabel.text = item.detailTitle
       rightTextlabel.font = .systemFont(ofSize: 12)
       rightTextlabel.numberOfLines = 2
       rightTextlabel.textAlignment = .right
       rightTextlabel.textColor = .lightGray
       rightTextlabel.sizeToFit()
 
-      cell.textLabel?.text = item.name
-      cell.detailTextLabel?.text = "\(payer.name) paid $\(Double(round(100 * amount) / 100))"
+      cell.textLabel?.text = item.title
+      cell.detailTextLabel?.text = item.subtitle
       cell.detailTextLabel?.textColor = .lightGray
       cell.accessoryView = rightTextlabel
       cell.selectionStyle = .none
@@ -108,36 +103,57 @@ class GroupDetailController: UITableViewController {
   }
 }
 
+struct GroupDetailItem: Equatable, IdentifiableType {
+  let title: String
+  let subtitle: String
+  let detailTitle: String
+  var identity: String {
+    return title + subtitle + detailTitle
+  }
+}
+
 class GroupDetailViewModel: ViewModel {
   let title: String
   let subtitle: String
-  let users: [User]
-  private(set) lazy var currentUser: User = {
-    let userID = UserDefaults.standard.integer(forKey: Constants.userID)
-    return self.users.first(where: { $0.id == userID })!
-  }()
-
   // swiftlint:disable:next weak_delegate
   var coordinatorDelegate: AnyObserver<CoordinatorDelegate>!
 
-  let dataSource: DataSource<ListableClosureService<Bill>>
   let service: GroupRequest
+  private(set) var dataSource: DataSource<ListableClosureService<GroupDetailItem>>!
 
   init(service: GroupRequest, group: Group) {
     let id = group.id
     self.service = service
-    dataSource = DataSource(
-      source: ListableClosureService<Bill> { [weak service] in service?.get(group: id).map({ $0.bills }) ?? .never() }
-    )
-    users = group.users
-    title = group.name
-    subtitle = """
+    self.title = group.name
+    self.subtitle = """
     \(group.bills.count) Bills
-    \(group.bills.count) memenbers
+    \(group.bills.count) members
     $\(group.bills.reduce(0.0, { $0 + $1.amount })) Total Expenses
     """
+    self.dataSource = DataSource(
+      source: ListableClosureService<GroupDetailItem> { [weak service] in
+        service?.get(group: id).map({ [weak self] in self?.buildItems(group: $0) ?? [] }) ?? .never()
+      }
+    )
   }
 
+  func buildItems(group: Group) -> [GroupDetailItem] {
+    let users = group.users
+    let userID = UserDefaults.standard.integer(forKey: Constants.userID)
+    let currentUser = users.first(where: { $0.id == userID })!
+    return group.bills.map { item in
+      let amount = item.amount
+      let payer = users.first(where: { $0.id == item.payerId })!
+      let action = payer.id == currentUser.id ? "lent" : "borrowed"
+      let perPerson = item.amount / Double(users.count)
+
+      return GroupDetailItem(
+        title: item.name,
+        subtitle: "\(payer.name) paid $\(Double(round(100 * amount) / 100))",
+        detailTitle: "you \(action)\n$\(perPerson * Double(users.count - 1))"
+      )
+    }
+  }
   func add(expense _: ExpenseRequest) {
     // add
     dataSource.reload.onNext(())
