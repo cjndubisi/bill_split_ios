@@ -73,9 +73,8 @@ class SignUpViewModel: ViewModel {
         guard let self = weakSelf else { return .never() }
 
         let params = AuthParameter(name: self.name, email: self.email, password: self.password)
-        return self.service.signUp(params: params).catchError { _ in
-          // TODO: Show Error
-          weakSelf?.coordinatorDelegate.onNext(.endAnimating)
+        return self.service.signUp(params: params).catchError { error in
+          weakSelf?.coordinatorDelegate.onNext(.error(error))
           return .never()
         }
       }

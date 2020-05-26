@@ -37,7 +37,7 @@ class AuthenticationCoordinator: BaseCoordinator {
     let controller = LoginController(viewModel: viewModel)
     let delegate = PublishSubject<CoordinatorDelegate>()
 
-    delegate.subscribe(onNext: { [weak self] in
+    delegate.subscribe(onNext: { [weak self, weak controller] in
       switch $0 {
       case .startAnimating:
         NVActivityIndicatorPresenter.sharedInstance.startAnimating(.init())
@@ -45,6 +45,9 @@ class AuthenticationCoordinator: BaseCoordinator {
         NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
       case let .navigate(scene):
         self?.route(to: scene)
+      case let .error(error):
+        NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
+        controller?.showAlert(title: "Error", message: error.localizedDescription)
       }
     }).disposed(by: controller.disposeBag)
 
@@ -58,7 +61,7 @@ class AuthenticationCoordinator: BaseCoordinator {
     let controller = SignUpController(viewModel: viewModel)
     let delegate = PublishSubject<CoordinatorDelegate>()
 
-    delegate.subscribe(onNext: { [weak self] in
+    delegate.subscribe(onNext: { [weak self, weak controller] in
       switch $0 {
       case .startAnimating:
         NVActivityIndicatorPresenter.sharedInstance.startAnimating(.init())
@@ -66,6 +69,9 @@ class AuthenticationCoordinator: BaseCoordinator {
         NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
       case let .navigate(scene):
         self?.route(to: scene)
+      case let .error(error):
+        NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
+        controller?.showAlert(title: "Error", message: error.localizedDescription)
       }
     }).disposed(by: controller.disposeBag)
 

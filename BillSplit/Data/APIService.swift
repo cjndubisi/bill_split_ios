@@ -6,6 +6,7 @@
 //  Copyright © 2020 Chijioke. All rights reserved.
 //
 
+import Moya
 import RxSwift
 
 protocol AuthService {
@@ -23,27 +24,45 @@ protocol GroupRequest: AnyObject {
 
 class BillAPIService {}
 
+public extension PrimitiveSequence where Trait == SingleTrait, Element == Response {
+  func mapServerError() -> Single<Element> {
+    return flatMap { response in
+      guard let json = try? response.mapJSON(failsOnEmptyData: true) else {
+        return .just(response)
+      }
+      guard (try? response.filterSuccessfulStatusCodes()) != nil else {
+        if let res = json as? [String: Any], let message = res["message"] {
+          throw NSError(domain: "API", code: 33, userInfo: [NSLocalizedDescriptionKey: message])
+        }
+        return .just(response)
+      }
+      return .just(response)
+    }
+  }
+}
+
 extension BillAPIService: AuthService {
   func signUp(params: AuthParameter) -> Single<AuthResponse> {
-    return billApi.rx.request(.signup(params)).map(AuthResponse.self)
+    return billApi.rx.request(.signup(params)).mapServerError()
+      .map(AuthResponse.self)
   }
 
   func login(params: AuthParameter) -> Single<AuthResponse> {
-    return billApi.rx.request(.login(params)).map(AuthResponse.self)
+    return billApi.rx.request(.login(params)).mapServerError().map(AuthResponse.self)
   }
 }
 
 extension BillAPIService: GroupRequest {
   func all() -> Single<[Group]> {
-    billApi.rx.request(.allGroups).map([Group].self)
+    billApi.rx.request(.allGroups).mapServerError().map([Group].self)
   }
 
   func get(group: Int) -> Single<Group> {
-    billApi.rx.request(.getGroup(group)).map(Group.self)
+    billApi.rx.request(.getGroup(group)).mapServerError().map(Group.self)
   }
 
   func add(expense: ExpenseRequest) -> Single<Bill> {
-    billApi.rx.request(.addExpense(expense)).map(Bill.self)
+    billApi.rx.request(.addExpense(expense)).mapServerError().map(Bill.self)
   }
 }
 

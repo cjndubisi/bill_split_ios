@@ -42,6 +42,7 @@ enum CoordinatorDelegate {
   case navigate(Scene)
   case startAnimating
   case endAnimating
+  case error(Error)
 }
 
 protocol ViewModel {}
