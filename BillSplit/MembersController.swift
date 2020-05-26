@@ -101,6 +101,9 @@ class MembersViewModel: ViewModel {
 
   func add(member request: MemberRequest) -> Disposable {
     return service.add(member: request).map { _ in () }
+      .do(onSuccess: {
+        NotificationCenter.default.post(name: .AppShouldReloadGroup, object: nil)
+      })
       .observeOn(MainScheduler.instance)
       .catchError({ [weak self] error in
         self?.coordinatorDelegate.onNext(.error(error))

@@ -93,10 +93,20 @@ class GroupDetailController: UITableViewController {
   }
 
   func bindViewModel() {
+    let refreshControl = UIRefreshControl()
+
     tableView.delegate = nil
     tableView.dataSource = nil
+    tableView.refreshControl = refreshControl
     tableHeader.titleLabel.text = viewModel.title
-    tableHeader.subtitleLabel.text = viewModel.subtitle
+
+    viewModel.subtitle.drive(tableHeader.subtitleLabel.rx.text).disposed(by: disposeBag)
+
+    Observable.merge(
+      NotificationCenter.default.rx.notification(.AppShouldReloadGroup).map({ _ in () }),
+      refreshControl.rx.controlEvent(.valueChanged).map({ _ in () })
+    )
+    .bind(to: viewModel.dataSource.reload).disposed(by: disposeBag)
 
     navigationItem.rightBarButtonItem?.rx.tap
       .map { [unowned viewModel] in .navigate(.members(viewModel.group)) }
@@ -117,39 +127,46 @@ class GroupDetailController: UITableViewController {
 }
 
 struct GroupDetailItem: Equatable, IdentifiableType {
+  let id: Int
   let title: String
   let subtitle: String
   let detailTitle: String
   var identity: String {
-    return title + subtitle + detailTitle
+    return title + subtitle + detailTitle + "\(id)"
   }
 }
 
 class GroupDetailViewModel: ViewModel {
   let title: String
-  let subtitle: String
+  let subtitle: Driver<String>
   // swiftlint:disable:next weak_delegate
   var coordinatorDelegate: AnyObserver<CoordinatorDelegate>!
 
   let service: GroupRequest
   private(set) var dataSource: DataSource<ListableClosureService<GroupDetailItem>>!
   private(set) var group: Group
+  let groupRelay: BehaviorRelay<Group>
 
   init(service: GroupRequest, group: Group) {
     let id = group.id
     self.service = service
     self.group = group
 
+    groupRelay = BehaviorRelay<Group>(value: group)
     title = group.name
-    subtitle = """
-    \(group.bills.count) Bills
-    \(group.users.count) members
-    $\(group.bills.reduce(0.0, { $0 + $1.amount })) Total Expenses
-    """
+    subtitle = groupRelay.observeOn(MainScheduler.instance)
+      .map { group in
+        """
+        \(group.bills.count) Bills
+        \(group.users.count) members
+        $\(group.bills.reduce(0.0, { $0 + $1.amount })) Total Expenses
+        """
+      }.asDriver(onErrorJustReturn: "")
     dataSource = DataSource(
       source: ListableClosureService<GroupDetailItem> { [weak service, weak self] in
         service?.get(group: id)
-          .do(onSuccess: { self?.group = $0 })
+          .do(onSuccess: { self?.groupRelay.accept($0) })
+          .observeOn(MainScheduler.instance)
           .map({ self?.buildItems(group: $0) ?? [] }) ?? .never()
       }
     )
@@ -166,6 +183,7 @@ class GroupDetailViewModel: ViewModel {
       let perPerson = item.amount / Double(users.count)
 
       return GroupDetailItem(
+        id: item.id,
         title: item.name,
         subtitle: "\(payer.name) paid $\(Double(round(100 * amount) / 100))",
         detailTitle: "you \(action)\n$\(perPerson * Double(users.count - 1))"
@@ -175,12 +193,15 @@ class GroupDetailViewModel: ViewModel {
 
   func add(expense: ExpenseRequest) -> Disposable {
     return service.add(expense: expense).map { _ in () }
+      .do(onSuccess: {
+        NotificationCenter.default.post(name: .AppShouldReloadGroup, object: nil)
+      })
       .observeOn(MainScheduler.instance)
       .catchError({ [weak self] error in
         self?.coordinatorDelegate.onNext(.error(error))
         return .never()
       })
-      .asObservable().subscribe(dataSource.reload)
+      .asObservable().subscribe()
   }
 }
 

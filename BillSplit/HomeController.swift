@@ -44,14 +44,17 @@ class HomeController: UITableViewController {
     tableView.delegate = nil
     tableView.dataSource = nil
     tableView.refreshControl = refreshControl
-    if let item = navigationItem.rightBarButtonItem {
-      item.rx.tap
-        .map { CoordinatorDelegate.navigate(.splash) }
-        .bind(to: viewModel.coordinatorDelegate).disposed(by: disposeBag)
-    }
+
+    navigationItem.rightBarButtonItem?.rx.tap
+      .map { CoordinatorDelegate.navigate(.splash) }
+      .bind(to: viewModel.coordinatorDelegate).disposed(by: disposeBag)
+
     // Bind Refreshing
-    refreshControl.rx.controlEvent(.valueChanged)
-      .bind(to: viewModel.dataSource.reload).disposed(by: disposeBag)
+    Observable.merge(
+      NotificationCenter.default.rx.notification(.AppShouldReloadGroup).map({ _ in () }),
+      refreshControl.rx.controlEvent(.valueChanged).map({ _ in () })
+    )
+    .bind(to: viewModel.dataSource.reload).disposed(by: disposeBag)
     viewModel.dataSource.fetching.observeOn(MainScheduler.instance)
       .bind(to: refreshControl.rx.isRefreshing).disposed(by: disposeBag)
 

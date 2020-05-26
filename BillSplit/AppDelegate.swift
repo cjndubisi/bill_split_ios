@@ -100,3 +100,7 @@ enum ApplicationCoordinatorDelegate {
   case homeFlow
   case start(Scene) // Deep Link
 }
+
+extension Notification.Name {
+  static let AppShouldReloadGroup = Notification.Name("AppShouldReloadGroup")
+}
