@@ -79,6 +79,7 @@ class SignUpViewModel: ViewModel {
       }
       .subscribe(onNext: { response in
         UserDefaults.standard.setValue(response.token, forKey: Constants.tokenKey)
+        UserDefaults.standard.setValue(response.user.id, forKey: Constants.userID)
         weakSelf?.coordinatorDelegate.onNext(.navigate(.home))
     })
 

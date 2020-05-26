@@ -15,6 +15,8 @@ protocol AuthService {
 
 protocol GroupRequest: AnyObject {
   func all() -> Single<[Group]>
+  func add(expense: ExpenseRequest) -> Single<Group>
+  func get(group: Int) -> Single<Group>
 }
 
 // MARK: BillAPIService
@@ -32,8 +34,17 @@ extension BillAPIService: AuthService {
 }
 
 extension BillAPIService: GroupRequest {
+
   func all() -> Single<[Group]> {
     billApi.rx.request(.allGroups).map([Group].self)
+  }
+
+  func get(group: Int) -> Single<Group> {
+    billApi.rx.request(.getGroup(group)).map(Group.self)
+  }
+
+  func add(expense: ExpenseRequest) -> Single<Group> {
+    billApi.rx.request(.addExpense(expense)).map(Group.self)
   }
 }
 

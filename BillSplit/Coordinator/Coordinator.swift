@@ -32,6 +32,7 @@ enum Scene {
   case home
   case group
   case groupDetail(Group)
+  case expenseInput
 }
 
 enum CoordinatorDelegate {

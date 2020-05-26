@@ -10,15 +10,6 @@ import Stevia
 import RxSwift
 import RxCocoa
 
-protocol NoBackTextController: UIViewController {}
-
-extension NoBackTextController {
-  func removeBackText() {
-    title = ""
-    navigationController?.navigationBar.topItem?.title = " "
-  }
-}
-
 extension UIViewController: NoBackTextController {}
 
 class GroupDetailController: UITableViewController {
@@ -86,15 +77,29 @@ class GroupDetailViewModel: ViewModel {
 
   // swiftlint:disable:next weak_delegate
   var coordinatorDelegate: AnyObserver<CoordinatorDelegate>!
-  
-  init(group: Group) {
-    title = group.name
-    subtitle = """
+
+  let dataSource: DataSource<ListableClosureService<Bill>>
+  let service: GroupRequest
+
+  init(service: GroupRequest, group: Group) {
+    let id = group.id
+    self.service = service
+    self.dataSource = DataSource(
+      source: ListableClosureService<Bill> { [weak service] in service?.get(group: id).map({ $0.bills }) ?? .never() }
+    )
+    self.title = group.name
+    self.subtitle = """
     \(group.bills.count) Bills
     \(group.bills.count) memenbers
     $\(group.bills.reduce(0.0, { $0 + $1.amount })) Total Expenses
     """
   }
+
+  func add(expense: ExpenseRequest) {
+    // add
+    dataSource.reload.onNext(())
+  }
+
 }
 
 private class GroupHeaderView: UIView {
