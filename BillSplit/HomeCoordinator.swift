@@ -49,19 +49,19 @@ class HomeCoordinator: BaseCoordinator {
     let participants = group.users.map({ $0.id })
     let userID = UserDefaults.standard.integer(forKey: Constants.userID)
 
-    alertController.addTextField { (textField) in
+    alertController.addTextField { textField in
       textField.placeholder = "Name"
       textField.tag = 1
     }
-    alertController.addTextField { (textField) in
+    alertController.addTextField { textField in
       textField.placeholder = "$0.0"
       textField.tag = 2
       textField.keyboardType = .decimalPad
     }
     alertController.addAction(.init(title: "Cancel", style: .cancel, handler: nil))
-    alertController.addAction(.init(title: "Add", style: .cancel) { [unowned alertController, weak viewModel] action  in
-      let nameField = alertController.textFields?.first(where: {$0.tag == 1 })
-      let amountField = alertController.textFields?.first(where: {$0.tag == 2 })
+    alertController.addAction(.init(title: "Add", style: .default) { [unowned alertController, weak viewModel] _ in
+      let nameField = alertController.textFields?.first(where: { $0.tag == 1 })
+      let amountField = alertController.textFields?.first(where: { $0.tag == 2 })
       guard let number = NumberFormatter().number(from: amountField!.text!),
         !nameField!.text!.isEmpty else { return }
       let amount = number.doubleValue
@@ -72,7 +72,7 @@ class HomeCoordinator: BaseCoordinator {
     delegate.subscribe(onNext: { [weak self] in
       switch $0 {
       case let .navigate(scene):
-        guard case .expenseInput = scene else {  self?.route(to: scene); return }
+        guard case .expenseInput = scene else { self?.route(to: scene); return }
 
       default: break
       }

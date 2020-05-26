@@ -34,7 +34,6 @@ extension BillAPIService: AuthService {
 }
 
 extension BillAPIService: GroupRequest {
-
   func all() -> Single<[Group]> {
     billApi.rx.request(.allGroups).map([Group].self)
   }

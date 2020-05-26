@@ -15,3 +15,11 @@ extension Group: IdentifiableType {
     return id
   }
 }
+
+extension Bill: IdentifiableType {
+  typealias Identity = Int
+
+  var identity: Int {
+    return id
+  }
+}

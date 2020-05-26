@@ -18,9 +18,16 @@ extension User: Hashable {}
 
 struct Bill: Codable {
   let id: Int
+  let name: String
   let amount: Double
   let payerId: Int
   let participants: [User]!
+}
+
+extension Bill: Equatable {
+  static func == (lhs: Bill, rhs: Bill) -> Bool {
+    lhs.id == rhs.id && lhs.name == rhs.name && lhs.amount == rhs.amount && lhs.payerId == rhs.payerId
+  }
 }
 
 struct Group: Codable {

@@ -6,9 +6,10 @@
 //  Copyright © 2020 Chijioke. All rights reserved.
 //
 
-import Stevia
-import RxSwift
 import RxCocoa
+import RxDataSources
+import RxSwift
+import Stevia
 
 extension UIViewController: NoBackTextController {}
 
@@ -54,12 +55,44 @@ class GroupDetailController: UITableViewController {
     let size = tableHeader.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     tableHeader.frame.size.height = size.height
     tableView.tableHeaderView = tableHeader
-    tableView.tableHeaderView?.isUserInteractionEnabled = true
-    tableHeader.isUserInteractionEnabled = true
-    tableView.contentInset.top = -50
+  }
+
+  private func tableViewDataSource() -> RxTableViewSectionedAnimatedDataSource<
+    AnimatableSectionModel<String, Bill>
+  > {
+    return RxTableViewSectionedAnimatedDataSource<
+      AnimatableSectionModel<String, Bill>
+    >(configureCell: { [unowned viewModel] (_, tableView, _, item) -> UITableViewCell in
+
+      let amount = item.amount
+      let payer = viewModel.users.first(where: { $0.id == item.payerId })!
+      let action = payer.id == viewModel.currentUser.id ? "lent" : "borrowed"
+      let perPerson = item.amount / Double(viewModel.users.count)
+      let cell = tableView.dequeueReusableCell(
+        withIdentifier: UITableViewCell.resuseIdentifier
+      ) ?? UITableViewCell(style: .subtitle, reuseIdentifier: UITableViewCell.resuseIdentifier)
+      let rightTextlabel = cell.accessoryView as? UILabel ?? UILabel()
+
+      rightTextlabel.text = "you \(action)\n$\(perPerson * Double(viewModel.users.count - 1))"
+      rightTextlabel.font = .systemFont(ofSize: 12)
+      rightTextlabel.numberOfLines = 2
+      rightTextlabel.textAlignment = .right
+      rightTextlabel.textColor = .lightGray
+      rightTextlabel.sizeToFit()
+
+      cell.textLabel?.text = item.name
+      cell.detailTextLabel?.text = "\(payer.name) paid $\(Double(round(100 * amount) / 100))"
+      cell.detailTextLabel?.textColor = .lightGray
+      cell.accessoryView = rightTextlabel
+      cell.selectionStyle = .none
+
+      return cell
+    })
   }
 
   func bindViewModel() {
+    tableView.delegate = nil
+    tableView.dataSource = nil
     tableHeader.titleLabel.text = viewModel.title
     tableHeader.subtitleLabel.text = viewModel.subtitle
     tableHeader.addExpenseButton.rx.tap.subscribe(onNext: { _ in
@@ -68,12 +101,21 @@ class GroupDetailController: UITableViewController {
     tableHeader.balanceButton.rx.tap.subscribe(onNext: { _ in
 
     }).disposed(by: disposeBag)
+
+    viewModel.dataSource.value
+      .map({ [AnimatableSectionModel(model: "bills", items: $0)] })
+      .bind(to: tableView.rx.items(dataSource: tableViewDataSource())).disposed(by: disposeBag)
   }
 }
 
 class GroupDetailViewModel: ViewModel {
   let title: String
   let subtitle: String
+  let users: [User]
+  private(set) lazy var currentUser: User = {
+    let userID = UserDefaults.standard.integer(forKey: Constants.userID)
+    return self.users.first(where: { $0.id == userID })!
+  }()
 
   // swiftlint:disable:next weak_delegate
   var coordinatorDelegate: AnyObserver<CoordinatorDelegate>!
@@ -84,22 +126,22 @@ class GroupDetailViewModel: ViewModel {
   init(service: GroupRequest, group: Group) {
     let id = group.id
     self.service = service
-    self.dataSource = DataSource(
+    dataSource = DataSource(
       source: ListableClosureService<Bill> { [weak service] in service?.get(group: id).map({ $0.bills }) ?? .never() }
     )
-    self.title = group.name
-    self.subtitle = """
+    users = group.users
+    title = group.name
+    subtitle = """
     \(group.bills.count) Bills
     \(group.bills.count) memenbers
     $\(group.bills.reduce(0.0, { $0 + $1.amount })) Total Expenses
     """
   }
 
-  func add(expense: ExpenseRequest) {
+  func add(expense _: ExpenseRequest) {
     // add
     dataSource.reload.onNext(())
   }
-
 }
 
 private class GroupHeaderView: UIView {
