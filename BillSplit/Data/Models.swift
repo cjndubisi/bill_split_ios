@@ -9,7 +9,7 @@
 import Foundation
 
 struct User: Codable {
-  var id: Int!
+  var id: Int
   let name: String
   let email: String
 }
@@ -17,14 +17,23 @@ struct User: Codable {
 extension User: Hashable {}
 
 struct Bill: Codable {
+  let id: Int
   let amount: Double
   let payerId: Int
-  let participants: [User]
+  let participants: [User]!
 }
 
 struct Group: Codable {
+  var id: Int
+  let name: String
   let users: [User]
-  let history: [Bill]
+  let bills: [Bill]
+}
+
+extension Group: Equatable {
+  static func == (lhs: Group, rhs: Group) -> Bool {
+    lhs.id == rhs.id && lhs.users.count == rhs.users.count && lhs.bills.count == rhs.bills.count
+  }
 }
 
 struct Payment {

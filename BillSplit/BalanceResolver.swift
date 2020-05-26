@@ -29,7 +29,7 @@ struct BalanceResolver {
    ```
    */
   public func resolve(from group: Group) -> [User: Payment] {
-    let history = group.history
+    let history = group.bills
     let users = group.users
     let itemStatement = history.map { (item) -> Result in
       let result: Result = [:]

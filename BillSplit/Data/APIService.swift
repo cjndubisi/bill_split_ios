@@ -13,6 +13,10 @@ protocol AuthService {
   func login(params: AuthParameter) -> Single<AuthResponse>
 }
 
+protocol GroupRequest: AnyObject {
+  func all() -> Single<[Group]>
+}
+
 // MARK: BillAPIService
 
 class BillAPIService {}

@@ -22,7 +22,7 @@ class DataSource<S: ListableService> {
   let errors = PublishSubject<Error>()
   private(set) var disposable: CompositeDisposable!
 
-  private let fetching: BehaviorRelay<Bool>
+  let fetching: BehaviorRelay<Bool>
   private var dataRelay: BehaviorRelay<[S.Item]>!
   private(set) var value: Observable<[S.Item]>!
   private let loadNext: AnyObserver<Void>
@@ -51,6 +51,7 @@ class DataSource<S: ListableService> {
 
     let reloadToken = Observable.merge(reloadRequest, pagingRequest)
       .observeOn(MainScheduler.instance)
+      .do(onNext: { _ in this?.fetching.accept(false) })
       .bind(to: relay)
 
     dataRelay = relay
@@ -67,7 +68,7 @@ class DataSource<S: ListableService> {
     disposable = CompositeDisposable(disposables: [reloadToken])
   }
 
-  func request(reload _: Bool) -> Single<[S.Item]> {
+  private func request(reload _: Bool) -> Single<[S.Item]> {
     return provider.list(page: 1)
       .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
       .do(onError: { [weak self] in self?.errors.onNext($0) })
