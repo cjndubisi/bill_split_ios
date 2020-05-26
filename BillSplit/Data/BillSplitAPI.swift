@@ -80,7 +80,7 @@ extension BillSplitAPI: TargetType {
     case .allGroups, .createGroup:
       return "/groups"
     case let .addFriendToGroup(request):
-      return "/groups/\(request.groupId)"
+      return "/groups/\(request.groupId)/users"
 
     // Expense
     case .addExpense:

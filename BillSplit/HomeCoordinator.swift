@@ -43,17 +43,17 @@ class HomeCoordinator: BaseCoordinator {
   private func groupDetailScene(with group: Group) {
     let viewModel: GroupDetailViewModel = .init(service: service, group: group)
     let controller = GroupDetailController(viewModel: viewModel)
-    let alertController = expenseInput(for: group, viewModel: viewModel, controller: controller)
     let delegate = PublishSubject<CoordinatorDelegate>()
 
     viewModel.coordinatorDelegate = delegate.asObserver()
-    delegate.subscribe(onNext: { [weak self] in
+    delegate.subscribe(onNext: { [unowned self] in
       guard case let .navigate(scene) = $0 else { return }
       if case .expenseInput = scene {
-        self?.navigationController.present(alertController, animated: true, completion: nil)
+        let alertController = self.expenseInput(for: group, viewModel: viewModel, controller: controller)
+        self.navigationController.present(alertController, animated: true, completion: nil)
         return
       }
-      self?.route(to: scene)
+      self.route(to: scene)
     }).disposed(by: controller.disposeBag)
 
     navigationController.pushViewController(controller, animated: true)
@@ -69,17 +69,17 @@ class HomeCoordinator: BaseCoordinator {
   func membersScene(for group: Group) {
     let viewModel = MembersViewModel(service: service, group: group)
     let controller = MembersController(viewModel: viewModel)
-    let alertController = addMember(to: group, viewModel: viewModel, controller: controller)
     let delegate = PublishSubject<CoordinatorDelegate>()
 
     viewModel.coordinatorDelegate = delegate.asObserver()
-    delegate.subscribe(onNext: { [weak self] in
+    delegate.subscribe(onNext: { [unowned self] in
       guard case let .navigate(scene) = $0 else { return }
       if case .addMember = scene {
-        self?.navigationController.present(alertController, animated: true, completion: nil)
+        let alertController = self.addMember(to: group, viewModel: viewModel, controller: controller)
+        self.navigationController.present(alertController, animated: true, completion: nil)
         return
       }
-      self?.route(to: scene)
+      self.route(to: scene)
     }).disposed(by: controller.disposeBag)
 
     navigationController.pushViewController(controller, animated: true)
@@ -130,24 +130,12 @@ class HomeCoordinator: BaseCoordinator {
     return alertController
   }
 
-  // TODO: Clean up duplicate.
   private func addMember(to group: Group,
                          viewModel: MembersViewModel,
                          controller: MembersController) -> UIViewController {
     let groupId = group.id
     let alertController = UIAlertController(title: "Add Member", message: nil, preferredStyle: .alert)
-
-    alertController.addTextField { textField in
-      textField.placeholder = "Name"
-      textField.tag = 1
-    }
-    alertController.addTextField { textField in
-      textField.placeholder = "Email"
-      textField.tag = 2
-      textField.keyboardType = .decimalPad
-    }
-    alertController.addAction(.init(title: "Cancel", style: .cancel, handler: nil))
-    alertController.addAction(.init(title: "Add", style: .default) {
+    let addAction = UIAlertAction(title: "Add", style: .default) {
       [unowned alertController,
        unowned controller,
        weak viewModel] _ in
@@ -166,7 +154,22 @@ class HomeCoordinator: BaseCoordinator {
       )
 
       viewModel?.add(member: request).disposed(by: controller.disposeBag)
-    })
+    }
+    alertController.addTextField { textField in
+      textField.placeholder = "Name"
+      textField.tag = 1
+    }
+    alertController.addTextField { [unowned controller] textField in
+      textField.placeholder = "Email"
+      textField.tag = 2
+      textField.keyboardType = .decimalPad
+      textField.rx.text.subscribe(onNext: { text in
+        addAction.isEnabled = RuleEmail().isValid(value: text) == nil && !text!.isEmpty
+      }).disposed(by: controller.disposeBag)
+    }
+    addAction.isEnabled = false
+    alertController.addAction(.init(title: "Cancel", style: .cancel, handler: nil))
+    alertController.addAction(addAction)
 
     return alertController
   }

@@ -46,11 +46,11 @@ class MembersController: UITableViewController {
     tableView.delegate = nil
     tableView.dataSource = nil
     tableView.refreshControl = refreshControl
-    if let item = navigationItem.rightBarButtonItem {
-      item.rx.tap
-        .map { CoordinatorDelegate.navigate(.splash) }
-        .bind(to: viewModel.coordinatorDelegate).disposed(by: disposeBag)
-    }
+
+    navigationItem.rightBarButtonItem?.rx.tap
+      .map { CoordinatorDelegate.navigate(.addMember) }
+      .bind(to: viewModel.coordinatorDelegate).disposed(by: disposeBag)
+
     // Bind Refreshing
     refreshControl.rx.controlEvent(.valueChanged)
       .bind(to: viewModel.dataSource.reload).disposed(by: disposeBag)
@@ -62,10 +62,6 @@ class MembersController: UITableViewController {
       .map({ [AnimatableSectionModel(model: "memberList", items: $0)] })
       .observeOn(MainScheduler.instance)
       .bind(to: tableView.rx.items(dataSource: tableViewDataSource())).disposed(by: disposeBag)
-
-    tableView.rx.modelSelected(Group.self)
-      .map { CoordinatorDelegate.navigate(.groupDetail($0)) }
-      .bind(to: viewModel.coordinatorDelegate).disposed(by: disposeBag)
 
     viewModel.dataSource.disposable.disposed(by: disposeBag)
   }
