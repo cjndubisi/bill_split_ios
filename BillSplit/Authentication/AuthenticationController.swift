@@ -55,6 +55,7 @@ class AuthenticationController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    removeBackText()
     bindViewModel()
   }
 

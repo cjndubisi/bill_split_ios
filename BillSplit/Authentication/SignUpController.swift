@@ -16,13 +16,13 @@ class SignUpController: FormViewController {
 
   required init(viewModel: SignUpViewModel) {
     self.viewModel = viewModel
-
     super.init(style: .plain)
   }
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     navigationController?.isNavigationBarHidden = false
+    tableView.layoutIfNeeded()
   }
 
   required init?(coder _: NSCoder) {
@@ -31,6 +31,8 @@ class SignUpController: FormViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    navigationItem.largeTitleDisplayMode = .never
+    removeBackText()
     tableView.separatorStyle = .none
     bindViewModel()
   }

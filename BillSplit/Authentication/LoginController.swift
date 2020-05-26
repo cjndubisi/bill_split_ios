@@ -22,6 +22,7 @@ class LoginController: FormViewController {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     navigationController?.isNavigationBarHidden = false
+    tableView.layoutIfNeeded()
   }
 
   required init?(coder _: NSCoder) {
@@ -30,8 +31,14 @@ class LoginController: FormViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    navigationItem.largeTitleDisplayMode = .never
+    removeBackText()
     tableView.separatorStyle = .none
     bindViewModel()
+  }
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
   }
 
   func bindViewModel() {
