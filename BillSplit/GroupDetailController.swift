@@ -166,6 +166,10 @@ class GroupDetailViewModel: ViewModel {
   func add(expense: ExpenseRequest) -> Disposable {
     return service.add(expense: expense).map { _ in () }
       .observeOn(MainScheduler.instance)
+      .catchError({ [weak self] error in
+        self?.coordinatorDelegate.onNext(.error(error))
+        return .never()
+      })
       .asObservable().subscribe(dataSource.reload)
   }
 }
