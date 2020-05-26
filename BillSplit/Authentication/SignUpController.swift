@@ -110,7 +110,7 @@ class SignUpViewModel: ViewModel {
         weakSelf?.email = row.value ?? ""
       })
       <<< TextInputRow(name: "Password")
-      .cellSetup({ _, row in
+      .cellSetup({ cell, row in
         row.add(rule: RuleRequired(msg: "Password is required"))
         })
       .cellUpdate({ cell, _ in

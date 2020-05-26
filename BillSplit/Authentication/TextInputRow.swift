@@ -48,6 +48,7 @@ class TextInputCell: Cell<String>, CellType {
     // super.update() // don't call super to void detailTextView
     selectionStyle = .none
     inputNameLabel.text = row.tag
+    inputTextField.autocapitalizationType = .none
     inputTextField.text = row.displayValueFor?(row.value)
       ?? (row as? NoValueDisplayTextConformance)?.noValueDisplayText
   }
