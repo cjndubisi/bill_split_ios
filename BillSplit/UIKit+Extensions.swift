@@ -68,3 +68,12 @@ extension UINavigationController {
     navigationBar.shadowImage = nil
   }
 }
+
+protocol NoBackTextController: UIViewController {}
+
+extension NoBackTextController {
+  func removeBackText() {
+    title = ""
+    navigationController?.navigationBar.topItem?.title = " "
+  }
+}
