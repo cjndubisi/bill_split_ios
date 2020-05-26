@@ -33,9 +33,10 @@ struct BalanceResolver {
     let users = group.users
     let itemStatement = history.map { (item) -> Result in
       let result: Result = [:]
-      let split = item.amount / Double(item.participants.count)
-      let payer = item.participants.first(where: { item.payerId == $0.id })!
-      return item.participants.reduce(result) { (prev, next) -> Result in
+      guard let participants = item.participants else { return Result() }
+      let split = item.amount / Double(participants.count)
+      let payer = participants.first(where: { item.payerId == $0.id })!
+      return participants.reduce(result) { (prev, next) -> Result in
         var acc = prev
         guard next != payer else { return acc }
 
