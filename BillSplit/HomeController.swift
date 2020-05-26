@@ -25,6 +25,10 @@ class HomeController: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    let barItem = UIBarButtonItem()
+    barItem.title = "Logout"
+    navigationItem.rightBarButtonItem = barItem
     bindViewModel()
   }
 
@@ -39,7 +43,11 @@ class HomeController: UITableViewController {
     tableView.delegate = nil
     tableView.dataSource = nil
     tableView.refreshControl = refreshControl
-
+    if let item = navigationItem.rightBarButtonItem {
+      item.rx.tap
+        .map { CoordinatorDelegate.navigate(.splash) }
+        .bind(to: viewModel.coordinatorDelegate).disposed(by: disposeBag)
+    }
     // Bind Refreshing
     refreshControl.rx.controlEvent(.valueChanged)
       .bind(to: viewModel.dataSource.reload).disposed(by: disposeBag)

@@ -118,6 +118,8 @@ class HomeCoordinator: BaseCoordinator {
   func route(to scene: Scene) {
     switch scene {
     case let .groupDetail(id): groupDetailScene(with: id)
+    case .splash:
+      parentDelegate?(.authFlow)
     default: break
     }
   }

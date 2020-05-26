@@ -79,6 +79,10 @@ class ApplicationCoordinator: Coordinator {
 
     // logout.
     homeCoordinator.parentDelegate = { [weak self, unowned homeCoordinator] in
+      [Constants.tokenKey, Constants.userID].forEach {
+        UserDefaults.standard.setValue(nil, forKey: $0)
+      }
+
       guard case .authFlow = $0 else { return }
       self?.authFlow(navigation: navigation)
       homeCoordinator.finish?()
