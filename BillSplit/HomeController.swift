@@ -7,8 +7,8 @@
 //
 
 import RxCocoa
-import RxSwift
 import RxDataSources
+import RxSwift
 
 class HomeController: UITableViewController {
   let viewModel: HomeViewModel
@@ -76,7 +76,7 @@ class HomeViewModel: ViewModel {
   }
 }
 
-fileprivate final class DetailTableCell: UITableViewCell {
+private final class DetailTableCell: UITableViewCell {
   override init(style _: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: .value1, reuseIdentifier: reuseIdentifier)
   }

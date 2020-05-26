@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4FDF392E247AA943003AEE03 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF392D247AA943003AEE03 /* AppDelegate.swift */; };
-		4FDF3935247AA943003AEE03 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF3933247AA943003AEE03 /* Main.storyboard */; };
 		4FDF3937247AA945003AEE03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF3936247AA945003AEE03 /* Assets.xcassets */; };
 		4FDF393A247AA945003AEE03 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FDF3938247AA945003AEE03 /* LaunchScreen.storyboard */; };
 		4FDF3945247AA945003AEE03 /* BillSplitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF3944247AA945003AEE03 /* BillSplitTests.swift */; };
@@ -52,7 +51,6 @@
 		419377B200CABDE6EBB40B1D /* Pods-BillSplitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BillSplitTests.release.xcconfig"; path = "Target Support Files/Pods-BillSplitTests/Pods-BillSplitTests.release.xcconfig"; sourceTree = "<group>"; };
 		4FDF392A247AA943003AEE03 /* BillSplit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BillSplit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FDF392D247AA943003AEE03 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4FDF3934247AA943003AEE03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4FDF3936247AA945003AEE03 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4FDF3939247AA945003AEE03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4FDF393B247AA945003AEE03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -134,7 +132,6 @@
 				4FDF3952247AB7D4003AEE03 /* BalanceResolver.swift */,
 				4FDF3975247C0654003AEE03 /* Constants.swift */,
 				4FDF3938247AA945003AEE03 /* LaunchScreen.storyboard */,
-				4FDF3933247AA943003AEE03 /* Main.storyboard */,
 				4FDF3962247AFD06003AEE03 /* Authentication */,
 				4FDF3961247AFCE7003AEE03 /* Coordinator */,
 				4FDF397A247C070F003AEE03 /* Data */,
@@ -308,7 +305,6 @@
 				4FDF393A247AA945003AEE03 /* LaunchScreen.storyboard in Resources */,
 				4FE0EA90247CE8D20005E715 /* Localizable.stringsdict in Resources */,
 				4FDF3937247AA945003AEE03 /* Assets.xcassets in Resources */,
-				4FDF3935247AA943003AEE03 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,14 +480,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		4FDF3933247AA943003AEE03 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4FDF3934247AA943003AEE03 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		4FDF3938247AA945003AEE03 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
