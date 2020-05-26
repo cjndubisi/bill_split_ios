@@ -129,12 +129,12 @@ class GroupDetailViewModel: ViewModel {
     title = group.name
     subtitle = """
     \(group.bills.count) Bills
-    \(group.bills.count) members
+    \(group.users.count) members
     $\(group.bills.reduce(0.0, { $0 + $1.amount })) Total Expenses
     """
     dataSource = DataSource(
-      source: ListableClosureService<GroupDetailItem> { [weak service] in
-        service?.get(group: id).map({ [weak self] in self?.buildItems(group: $0) ?? [] }) ?? .never()
+      source: ListableClosureService<GroupDetailItem> { [weak service, weak self] in
+        service?.get(group: id).map({ self?.buildItems(group: $0) ?? [] }) ?? .never()
       }
     )
   }
