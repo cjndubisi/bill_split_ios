@@ -59,21 +59,36 @@ class HomeCoordinator: BaseCoordinator {
       textField.keyboardType = .decimalPad
     }
     alertController.addAction(.init(title: "Cancel", style: .cancel, handler: nil))
-    alertController.addAction(.init(title: "Add", style: .default) { [unowned alertController, weak viewModel] _ in
+    alertController.addAction(.init(title: "Add", style: .default) {
+      [unowned alertController,
+       unowned controller,
+       weak viewModel] _ in
+
       let nameField = alertController.textFields?.first(where: { $0.tag == 1 })
       let amountField = alertController.textFields?.first(where: { $0.tag == 2 })
+
       guard let number = NumberFormatter().number(from: amountField!.text!),
-        !nameField!.text!.isEmpty else { return }
+        let name = nameField?.text, !name.isEmpty
+      else { return }
+
       let amount = number.doubleValue
-      let request = ExpenseRequest(amount: amount, payerId: userID, groupId: groupId, participants: participants)
-      viewModel?.add(expense: request)
+      let request = ExpenseRequest(
+        name: name,
+        amount: amount,
+        payerId: userID,
+        groupId: groupId,
+        participants: participants
+      )
+
+      viewModel?.add(expense: request).disposed(by: controller.disposeBag)
     })
 
+    viewModel.coordinatorDelegate = delegate.asObserver()
     delegate.subscribe(onNext: { [weak self] in
       switch $0 {
       case let .navigate(scene):
         guard case .expenseInput = scene else { self?.route(to: scene); return }
-
+        self?.navigationController.present(alertController, animated: true, completion: nil)
       default: break
       }
     }).disposed(by: controller.disposeBag)

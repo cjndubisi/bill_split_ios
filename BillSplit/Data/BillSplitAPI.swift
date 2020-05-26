@@ -29,6 +29,7 @@ struct FriendRequest: RequestParam {
 }
 
 struct ExpenseRequest: RequestParam {
+  let name: String
   let amount: Double
   let payerId: Int
   let groupId: Int

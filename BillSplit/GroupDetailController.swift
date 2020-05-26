@@ -90,10 +90,12 @@ class GroupDetailController: UITableViewController {
     tableView.dataSource = nil
     tableHeader.titleLabel.text = viewModel.title
     tableHeader.subtitleLabel.text = viewModel.subtitle
-    tableHeader.addExpenseButton.rx.tap.subscribe(onNext: { _ in
-
+    tableHeader.addExpenseButton.rx.tap.observeOn(MainScheduler.instance)
+      .subscribe(onNext: { [weak viewModel] _ in
+        viewModel?.coordinatorDelegate.onNext(.navigate(.expenseInput))
     }).disposed(by: disposeBag)
-    tableHeader.balanceButton.rx.tap.subscribe(onNext: { _ in
+    tableHeader.balanceButton.rx.tap.observeOn(MainScheduler.instance)
+      .subscribe(onNext: { _ in
 
     }).disposed(by: disposeBag)
 
@@ -124,13 +126,13 @@ class GroupDetailViewModel: ViewModel {
   init(service: GroupRequest, group: Group) {
     let id = group.id
     self.service = service
-    self.title = group.name
-    self.subtitle = """
+    title = group.name
+    subtitle = """
     \(group.bills.count) Bills
     \(group.bills.count) members
     $\(group.bills.reduce(0.0, { $0 + $1.amount })) Total Expenses
     """
-    self.dataSource = DataSource(
+    dataSource = DataSource(
       source: ListableClosureService<GroupDetailItem> { [weak service] in
         service?.get(group: id).map({ [weak self] in self?.buildItems(group: $0) ?? [] }) ?? .never()
       }
@@ -154,9 +156,11 @@ class GroupDetailViewModel: ViewModel {
       )
     }
   }
-  func add(expense _: ExpenseRequest) {
-    // add
-    dataSource.reload.onNext(())
+
+  func add(expense: ExpenseRequest) -> Disposable {
+    return service.add(expense: expense).map { _ in () }
+      .observeOn(MainScheduler.instance)
+      .asObservable().subscribe(dataSource.reload)
   }
 }
 
