@@ -96,7 +96,7 @@ class GroupDetailController: UITableViewController {
       .bind(to: viewModel.coordinatorDelegate).disposed(by: disposeBag)
 
     tableHeader.balanceButton.rx.tap.observeOn(MainScheduler.instance)
-      .map { .navigate(.groupBalance) }
+      .map { [unowned viewModel] in .navigate(.groupBalance(viewModel.group)) }
       .bind(to: viewModel.coordinatorDelegate).disposed(by: disposeBag)
 
     viewModel.dataSource.value
@@ -122,10 +122,13 @@ class GroupDetailViewModel: ViewModel {
 
   let service: GroupRequest
   private(set) var dataSource: DataSource<ListableClosureService<GroupDetailItem>>!
+  private(set) var group: Group
 
   init(service: GroupRequest, group: Group) {
     let id = group.id
     self.service = service
+    self.group = group
+
     title = group.name
     subtitle = """
     \(group.bills.count) Bills
@@ -134,7 +137,9 @@ class GroupDetailViewModel: ViewModel {
     """
     dataSource = DataSource(
       source: ListableClosureService<GroupDetailItem> { [weak service, weak self] in
-        service?.get(group: id).map({ self?.buildItems(group: $0) ?? [] }) ?? .never()
+        service?.get(group: id)
+          .do(onSuccess: { self?.group = $0 })
+          .map({ self?.buildItems(group: $0) ?? [] }) ?? .never()
       }
     )
   }

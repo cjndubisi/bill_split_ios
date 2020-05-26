@@ -51,7 +51,7 @@ class HomeCoordinator: BaseCoordinator {
         switch scene {
         case .expenseInput:
           self?.navigationController.present(alertController, animated: true, completion: nil)
-        case .groupBalance:
+        case let .groupBalance(group):
           self?.balanceScene(for: group)
         default:
           break
@@ -63,8 +63,8 @@ class HomeCoordinator: BaseCoordinator {
     navigationController.pushViewController(controller, animated: true)
   }
 
-  func balanceScene(for _: Group) {
-    let viewModel = BalanceViewModel()
+  func balanceScene(for group: Group) {
+    let viewModel = BalanceViewModel(group: group)
     let controller = BalanceController(viewModel: viewModel)
 
     navigationController.pushViewController(controller, animated: true)
